@@ -13,9 +13,8 @@ private:
 	Queue<Severity> q;
 public:
 	Cashier() = default;
-	Cashier(const MyString& firstName, const MyString& secondName, const MyString& password);
     Cashier(const MyString& firstName,const MyString& secondName,const MyString& phoneNumber,
-        const MyString& password,int age, unsigned transactionCount, const MyVector<Warning>& warnings, const Queue<Severity>& q);
+        const MyString& password,int age);
 
 	const unsigned getTransactionCount() const;
 	const MyVector<Warning>& getWarnings() const;

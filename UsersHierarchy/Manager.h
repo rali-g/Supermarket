@@ -11,7 +11,6 @@ private:
 	void generateCode();
 public:
 	Manager() = default;
- 	Manager(const MyString& firstName, const MyString& secondName, const MyString& password);
 	Manager(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber,
 		const MyString& password, int age);
 	Manager(MyString&& firstName, MyString&& secondName, MyString&& phoneNumber,

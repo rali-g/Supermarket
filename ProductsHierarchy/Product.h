@@ -1,6 +1,6 @@
 #pragma once
 #include "../Helpers/MyString.h"
-#include "../Components/Category.hpp"
+#include "../Components/Category.h"
 
 enum class ProductType
 {

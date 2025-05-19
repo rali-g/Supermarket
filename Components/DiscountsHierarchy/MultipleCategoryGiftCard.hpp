@@ -9,6 +9,10 @@ private:
 public:
     MultipleCategoryGiftCard() = default;
 
+    MultipleCategoryGiftCard(double percentage, const MyVector<unsigned>& categoryIds) : GiftCard(percentage) {
+        setCategoryIds(categoryIds);
+    }
+
     bool meetsDiscountCriteria(const Product& product) const override {
         unsigned prodCategoryId = product.getCategory().getId();
         for (int i = 0; i < categoryIds.size(); i++) {
@@ -17,6 +21,14 @@ public:
             }
         }
         return false;
+    }
+
+    void setCategoryIds(const MyVector<unsigned>& categoryIds) {
+        this->categoryIds = categoryIds;
+    }
+
+    const  MyVector<unsigned>& getCategoryIds() const {
+        return categoryIds;
     }
 
     void writeToFile(std::ofstream& ofs) const override {
@@ -63,9 +75,5 @@ public:
 
     void addCategory(unsigned id) {
         categoryIds.push_back(id);
-    }
-
-    const MyVector<unsigned>& getCategoryIds() const {
-        return categoryIds;
     }
 };

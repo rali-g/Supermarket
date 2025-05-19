@@ -1,15 +1,8 @@
 #include "Cashier.h"
 
-Cashier::Cashier(const MyString& firstName, const MyString& secondName, 
-	const MyString& password) : Employee(firstName, secondName, password) {}
-
 Cashier::Cashier(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber,
-	const MyString& password, int age, unsigned transactionCount, const MyVector<Warning>& warnings, const Queue<Severity>& q) :
-	Employee(firstName, secondName, phoneNumber, password, age)
-{
-	setTransactionCount(transactionCount);
-	setWarnings(warnings);
-}
+	const MyString& password, int age) :
+	Employee(firstName, secondName, phoneNumber, password, age) {}
 
 const unsigned Cashier::getTransactionCount() const
 {

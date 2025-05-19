@@ -1,13 +1,13 @@
 #include "UserFactory.h"
 
-User* UserFactory::createUser(std::ifstream& ifs)
+Employee* UserFactory::createUser(std::ifstream& ifs)
 {
 	UserType type;
-	User* ptr = nullptr;
+	Employee* ptr = nullptr;
 	ifs.read((char*)&type, sizeof(type));
 
 	switch (type) {
-		case UserType::Cashier
+	case UserType::Cashier:
 		ptr = new Cashier();
 		ptr->readFromFile(ifs);
 		break;

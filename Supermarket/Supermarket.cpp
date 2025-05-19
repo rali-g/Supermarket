@@ -1,27 +1,4 @@
 #include "Supermarket.h"
-
-void Supermarket::addEmployee(Employee* employee)
-{
-	employees.push_back(polymorphic_ptr<Employee>(employee->clone()));
-}
-
-void Supermarket::addTransaction(const Transaction& transaction) {
-	transactions.push_back(transaction);
-}
-
-void Supermarket::addProduct(Product* product) {
-	products.push_back(polymorphic_ptr<Product>(product->clone()));
-}
-
-void Supermarket::addGiftCard(GiftCard* giftCard) {
-	discounts.push_back(polymorphic_ptr<GiftCard>(giftCard->clone()));
-}
-
-void Supermarket::addCategories(const Category& category)
-{
-	categories.push_back(category);
-}
-
 int Supermarket::findEmployeeById(unsigned id) const {
 	for (int i = 0; i < employees.size(); ++i) {
 		if (employees[i]->getId() == id) {
@@ -31,14 +8,147 @@ int Supermarket::findEmployeeById(unsigned id) const {
 	return -1;
 }
 
-int Supermarket::findProductByName(const MyString& productName) const
+bool Supermarket::employeeExists(const Employee& e) const
+{
+	for (int i = 0; i < employees.size(); ++i) {
+		if (employees[i]->getId() == e.getId()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Supermarket::productExists(const Product& product) const
+{
+	for (int i = 0; i < employees.size(); ++i) {
+		if (products[i]->getId() == product.getId()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Supermarket::discountExists(const GiftCard& card) const
+{
+	for (int i = 0; i < discounts.size(); ++i) {
+		if (discounts[i]->getId() == card.getId()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Supermarket::transactionExists(const Transaction& t) const
+{
+	for (int i = 0; i < transactions.size(); ++i) {
+		if (transactions[i].getId() == t.getId()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Supermarket::categoryExists(const Category& c) const
+{
+	for (int i = 0; i < categories.size(); ++i) {
+		if (categories[i].getId() == c.getId()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int Supermarket::findProductById(unsigned id) const
 {
 	for (int i = 0; i < products.size(); i++) {
-		if (products[i]->getProductName() == productName) {
+		if (products[i]->getId() == id) {
 			return i;
 		}
 	}
 	return -1;
+}
+
+static bool isLogInDataValid(unsigned id, const MyString& password, const Employee* employee)
+{
+	if (!employee)
+	{
+		return false;
+	}
+
+	return (employee->getId() == id && employee->isValidPassword(password));
+}
+
+void Supermarket::_register(const UserType& type, const MyString& firstName, const MyString& lastName, const MyString& phoneNumber, unsigned age, const MyString& password)
+{
+	switch (type) {
+	case UserType::Cashier: {
+		Cashier request(firstName, lastName, phoneNumber, password, age);
+		pendingRequests.push_back(request);
+		break;
+	}
+	case UserType::Manager:
+		Manager manager(firstName, lastName, phoneNumber, password, age);
+		employees.push_back(manager.clone());
+		break;
+	}
+}
+
+void Supermarket::_approveRegistration(unsigned id)
+{
+	if (loggedData.type == UserType::Manager) {
+		for (int i = 0; i < pendingRequests.size(); i++) {
+			if (pendingRequests[i].getId() == id) {
+				employees.push_back(pendingRequests[i].clone());
+				pendingRequests.erase(i);
+				return;
+			}
+		}
+	}
+	throw std::exception("User is not manager! Permission denied!");
+}
+
+void Supermarket::_disapproveRegistration(unsigned id)
+{
+	if (loggedData.type == UserType::Manager) {
+		for (int i = 0; i < pendingRequests.size(); i++) {
+			if (pendingRequests[i].getId() == id) {
+				pendingRequests.erase(i);
+				return;
+			}
+		}
+	}
+	throw std::exception("User is not manager! Permission denied!");
+}
+
+void Supermarket::login(unsigned id, const MyString& password)
+{
+	if (loggedData.logged)
+	{
+		throw std::invalid_argument("Someone's logged in!");
+	}
+
+	for (size_t i = 0; i < employees.size(); i++)
+	{
+		if (isLogInDataValid(id, password, employees[i].get()))
+		{
+			loggedData.logged = employees[i].get();
+			if (loggedData.loggedManager = dynamic_cast<Manager*>(employees[i].get()))
+			{
+				loggedData.type = UserType::Manager;
+			}
+			else if (loggedData.loggedCashier = dynamic_cast<Cashier*>(employees[i].get()))
+			{
+				loggedData.type = UserType::Cashier;
+			}
+			return;
+		}
+	}
+	throw std::invalid_argument("Employee with these data details doesn't exist!");
+}
+
+void Supermarket::logout()
+{
+	loggedData = LoggedData();
 }
 
 void Supermarket::leave(unsigned id) {
@@ -88,6 +198,15 @@ void Supermarket::addWarningToCashier(unsigned managerId, unsigned cashierId, co
 	}
 	cashier->addElementToWarnings(warning);
 	std::cout << "Warning added successfully.\n";
+}
+
+void Supermarket::listUserData() const
+{
+	if (!loggedData.logged)
+	{
+		throw std::invalid_argument("No user has logged in!");
+	}
+	loggedData.logged->whoAmI();
 }
 
 void Supermarket::listEmployees() const {
@@ -363,4 +482,58 @@ Supermarket::Supermarket()
 Supermarket::~Supermarket()
 {
 	writeToFile();
+}
+
+void Supermarket::addCashier(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber, const MyString& password, unsigned age)
+{
+	Employee* client = new Cashier(firstName, secondName, phoneNumber, password, age);
+	employees.push_back(client);
+}
+
+void Supermarket::addManager(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber, const MyString& password, unsigned age)
+{
+	Employee* manager = new Manager(firstName, secondName, phoneNumber, password, age);
+	employees.push_back(manager);
+}
+
+void Supermarket::addTransaction(unsigned cashierId, int totalAmount, const MyString& date, const MyString& receiptFileName)
+{
+	Transaction tr(cashierId, totalAmount, date, receiptFileName);
+	transactions.push_back(tr);
+}
+
+void Supermarket::addCategory(const MyString& categoryName, const MyString& description)
+{
+	Category c(categoryName, description);
+	categories.push_back(c);
+}
+
+void Supermarket::addProductByUnit(const MyString& name, const Category& category, double price, double discount, unsigned availableQuantity)
+{
+	Product* productByUnit = new ProductsByUnit(name, category, price, discount, availableQuantity);
+	products.push_back(productByUnit);
+}
+
+void Supermarket::addProductByWeight(const MyString& name, const Category& category, double price, double discount, double availableKilograms)
+{
+	Product* productByWeight = new ProductsByWeight(name, category, price, discount, availableKilograms);
+	products.push_back(productByWeight);
+}
+
+void Supermarket::addSingleCategoryGiftCard(double percentage, unsigned categoryId)
+{
+	GiftCard* singleCard = new SingleCategoryGiftCard(percentage, categoryId);
+	discounts.push_back(singleCard);
+}
+
+void Supermarket::addMultipleCategoryGiftCard(double percentage, const MyVector<unsigned>& categoryIds)
+{
+	GiftCard* multipleCard = new MultipleCategoryGiftCard(percentage, categoryIds);
+	discounts.push_back(multipleCard);
+}
+
+void Supermarket::addAllProductsGiftCard()
+{
+	GiftCard* allCard = new AllProductsGiftCard();
+	discounts.push_back(allCard);
 }

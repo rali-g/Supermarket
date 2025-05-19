@@ -6,11 +6,22 @@ private:
 	unsigned categoryId = 0;
 public:
 	SingleCategoryGiftCard() = default;
+	SingleCategoryGiftCard(double percentage, unsigned categoryId) : GiftCard(percentage) {
+		setcategoryId(categoryId);
+	}
 	bool meetsDiscountCriteria(const Product& product) const override {
 		if (product.getCategory().getId() == categoryId) {
 			return true;
 		}
 		return false;
+	}
+
+	void setcategoryId(unsigned categoryId) {
+		this->categoryId = categoryId;
+	}
+
+	unsigned getCategoryId() const {
+		return categoryId;
 	}
 
 	void writeToFile(std::ofstream& ofs) const override {

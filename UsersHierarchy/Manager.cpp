@@ -8,12 +8,6 @@ void Manager::generateCode()
 	delete generator;
 }
 
-Manager::Manager(const MyString& firstName, const MyString& secondName, const MyString& password)
-	: Employee(firstName, secondName, password)
-{
-	generateCode();
-}
-
 Manager::Manager(const MyString& firstName, const MyString& secondName,
 	const MyString& phoneNumber, const MyString& password, int age) : Employee(firstName, secondName, phoneNumber, password, age)
 {

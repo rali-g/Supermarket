@@ -89,4 +89,10 @@ void GiftCard::readFromFile(std::ifstream& ifs)
     ifs.read((char*)&id, sizeof(id));
 }
 
+void GiftCard::print() const
+{
+    std::cout << "Percentage: " << percentage;
+    std::cout << "\nId: " << id;
+}
+
 unsigned GiftCard::counter = 0;

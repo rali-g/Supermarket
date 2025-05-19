@@ -6,6 +6,9 @@ Warning::Warning(const MyString& sender, const MyString& description, const Seve
     setSeverity(severity);
 }
 
+Warning::Warning(MyString&& sender, MyString&& description, Severity&& severity) :
+    sender(std::move(sender)), description(std::move(description)), severity(std::move(severity)) {}
+
 const MyString& Warning::getSender() const {
     return sender;
 }

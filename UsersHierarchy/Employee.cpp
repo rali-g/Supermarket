@@ -160,24 +160,22 @@ void Employee::setPassword(const MyString& password)
 
 void Employee::writeToFile(std::ofstream& ofs) const
 {
-	ofs.write((const char*)&counter, sizeof(unsigned));
-	ofs.write((const char*)&id, sizeof(unsigned));
 	writeStringToFile(ofs, firstName);
 	writeStringToFile(ofs, secondName);
 	writeStringToFile(ofs, phoneNumber);
 	writeStringToFile(ofs, password);
 	ofs.write((const char*)&age, sizeof(unsigned));
+	ofs.write((const char*)&id, sizeof(unsigned));
 }
 
 void Employee::readFromFile(std::ifstream& ifs)
 {
-	ifs.read((char*)&counter, sizeof(unsigned));
-	ifs.read((char*)&id, sizeof(unsigned));
 	firstName = readStringFromFile(ifs);
 	secondName = readStringFromFile(ifs);
 	phoneNumber = readStringFromFile(ifs);
 	password = readStringFromFile(ifs);
 	ifs.read((char*)&age, sizeof(unsigned));
+	ifs.read((char*)&id, sizeof(unsigned));
 }
 
 unsigned Employee::counter = 1000;

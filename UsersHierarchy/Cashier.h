@@ -1,7 +1,7 @@
 #pragma once
 #include "../UsersHierarchy/Employee.h"
 #include "../Helpers/MyVector.hpp"
-#include "../Components/Users/Warning.h"
+#include "../Components/Warning.h"
 #include "../Helpers/Helpers.h"
 #include "../Helpers/Queue.hpp"
 
@@ -15,10 +15,14 @@ public:
 	Cashier() = default;
 	Cashier(const MyString& firstName, const MyString& secondName, const MyString& password);
     Cashier(const MyString& firstName,const MyString& secondName,const MyString& phoneNumber,
-        const MyString& password,int age, unsigned transactionCount, const MyVector<Warning>& warnings);
+        const MyString& password,int age, unsigned transactionCount, const MyVector<Warning>& warnings, const Queue<Severity>& q);
 
 	const unsigned getTransactionCount() const;
 	const MyVector<Warning>& getWarnings() const;
+	const Queue<Severity>& getQueue() const;
+
+	void removeElementFromQueue();
+	void addElementToWarnings(const Warning& warning);
 
 	void setTransactionCount(unsigned transactionCount);
 	void setWarnings(const MyVector<Warning>& warnings);

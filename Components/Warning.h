@@ -17,6 +17,7 @@ private:
 public:
     Warning() = default;
     Warning(const MyString& sender, const MyString& description, const Severity& severity);
+    Warning(MyString&& sender, MyString&& description, Severity&& severity);
 
     const MyString& getSender() const;
     const MyString& getDescription() const;

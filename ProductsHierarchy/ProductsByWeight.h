@@ -15,6 +15,7 @@ public:
     double getAvailableKilograms() const;
     void setAvailableKilograms(double kilograms);
 
+    void printFormatted() const override;
     void print() const override;
     Product* clone() const override;
 

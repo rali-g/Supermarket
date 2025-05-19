@@ -1,7 +1,8 @@
 #pragma once
 #include "../UsersHierarchy/Employee.h"
-#include "../Components/Users/CodeGenerator.hpp"
+#include "../Components/CodeGenerator.hpp"
 #include "../Helpers/Helpers.h"
+#include "../../UsersHierarchy/Cashier.h"
 
 class Manager : public Employee
 {
@@ -13,6 +14,8 @@ public:
  	Manager(const MyString& firstName, const MyString& secondName, const MyString& password);
 	Manager(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber,
 		const MyString& password, int age);
+	Manager(MyString&& firstName, MyString&& secondName, MyString&& phoneNumber,
+		MyString&& password, int age);
 
 	bool isValidSpecialCode(const MyString& specialCode) const;
 

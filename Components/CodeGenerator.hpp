@@ -1,7 +1,9 @@
 #pragma once
 #include "../../Helpers/MyString.h"
+#include "../../Helpers/Helpers.h"
 #include <cstdlib>
 #include <ctime> 
+#include <iostream>
 
 class CodeGenerator {
 private: 
@@ -22,7 +24,7 @@ public:
 	CodeGenerator() {
         seedOnce();;
 	}
-	const MyString& generateSpecialCode() {
+	const MyString& generateManagerCode() {
         char buffer[8];
         buffer[0] = getRandomDigit();
         buffer[1] = getRandomUpper();
@@ -36,4 +38,22 @@ public:
         code = MyString(buffer);
         return code;
 	}
+
+    const MyString& generateCardCode(unsigned id) {
+        MyString result;
+        char buffer[3];
+        char currBuff[1024];
+        buffer[0] = getRandomDigit();
+        buffer[1] = getRandomUpper();
+        buffer[2] = '\0';
+        result += MyString(buffer);
+        result += MyString(uintToStr(id, currBuff));
+        buffer[0] = getRandomUpper();
+        buffer[1] = getRandomDigit();
+        buffer[2] = '\0';
+        result += buffer;
+
+        code = result;
+        return code;
+    }
 };

@@ -4,7 +4,7 @@ Cashier::Cashier(const MyString& firstName, const MyString& secondName,
 	const MyString& password) : Employee(firstName, secondName, password) {}
 
 Cashier::Cashier(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber,
-	const MyString& password, int age, unsigned transactionCount, const MyVector<Warning>& warnings) :
+	const MyString& password, int age, unsigned transactionCount, const MyVector<Warning>& warnings, const Queue<Severity>& q) :
 	Employee(firstName, secondName, phoneNumber, password, age)
 {
 	setTransactionCount(transactionCount);
@@ -21,6 +21,28 @@ const MyVector<Warning>& Cashier::getWarnings() const
 	return warnings;
 }
 
+const Queue<Severity>& Cashier::getQueue() const
+{
+	return q;
+}
+
+void Cashier::addElementToWarnings(const Warning& warning)
+{
+	warnings.push_back(warning);
+	q.enqueue(warning.getSeverity());
+}
+
+void Cashier::removeElementFromQueue()
+{
+	Severity curr = q.peek();
+	for (int i = 0; i < warnings.size(); i++) {
+		if (warnings[i].getSeverity() == curr) {
+			warnings.erase(i);
+		}
+	}
+	q.dequeue();
+}
+
 void Cashier::setTransactionCount(unsigned transactionCount)
 {
 	if (transactionCount < 0) {
@@ -31,6 +53,9 @@ void Cashier::setTransactionCount(unsigned transactionCount)
 
 void Cashier::setWarnings(const MyVector<Warning>& warnings)
 {
+	for (int i = 0; i < warnings.size(); i++) {
+		q.enqueue(warnings[i].getSeverity());
+	}
 	this->warnings = warnings;
 }
 

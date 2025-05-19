@@ -24,6 +24,11 @@ void ProductsByWeight::setAvailableKilograms(double kilograms) {
     availableKilograms = kilograms;
 }
 
+void ProductsByWeight::printFormatted() const 
+{
+    std::cout << getProductName() << " : " << getPrice() << " : " << availableKilograms << std::endl;
+}
+
 void ProductsByWeight::print() const {
     printBasicInfo();
     std::cout << "Available: " << availableKilograms << " kg\n";

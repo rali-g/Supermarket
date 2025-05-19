@@ -2,6 +2,14 @@
 #include "../Helpers/MyString.h"
 #include "../Helpers/Helpers.h"
 
+enum class UserType
+{
+	Unknown,
+	Cashier,
+	Manager
+};
+
+
 class Employee
 {
 private:
@@ -42,7 +50,7 @@ public:
 	void setAge(unsigned age);
 	void setPassword(const MyString& password);
 
-	void writeToFile(std::ofstream& ofs) const;
-	void readFromFile(std::ifstream& ifs);
+	virtual void writeToFile(std::ofstream& ofs) const = 0;
+	virtual void readFromFile(std::ifstream& ifs) = 0;
 };
 

@@ -1,10 +1,10 @@
 #include "Manager.h"
-#include "../Components/Users/CodeGenerator.hpp"
+#include "../Components/CodeGenerator.hpp"
 
 void Manager::generateCode()
 {
 	CodeGenerator* generator = new CodeGenerator;
-	specialCode = generator->generateSpecialCode();
+	specialCode = generator->generateManagerCode();
 	delete generator;
 }
 
@@ -19,6 +19,9 @@ Manager::Manager(const MyString& firstName, const MyString& secondName,
 {
 	generateCode();
 }
+
+Manager::Manager(MyString&& firstName, MyString&& secondName, MyString&& phoneNumber, MyString&& password, int age)
+	: Employee(std::move(firstName), std::move(secondName), std::move(phoneNumber), std::move(password), age) {}
 
 bool Manager::isValidSpecialCode(const MyString& specialCode) const
 {
@@ -71,7 +74,6 @@ Employee* Manager::clone() const
 void Manager::print() const
 {
 	printBasicInfo();
-	std::cout << "Special Code: " << getSpecialCode() << std::endl;
 }
 
 bool CodeGenerator::seeded = false;

@@ -36,6 +36,11 @@ void ProductsByUnit::readFromFile(std::ifstream& ifs)
     ifs.read((char*)&availableQuantity, sizeof(availableQuantity));
 }
 
+void ProductsByUnit::printFormatted() const
+{
+    std::cout << getProductName() << " : " << getPrice() << " : " << availableQuantity << std::endl;
+}
+
 void ProductsByUnit::print() const {
     printBasicInfo();
     std::cout << "Quantity: " << availableQuantity;

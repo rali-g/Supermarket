@@ -38,3 +38,19 @@ const char* uintToStr(unsigned num, char* buffer)
 	return buffer;
 }
 
+unsigned strToUint(const MyString& str)
+{
+	unsigned result = 0;
+	size_t len = str.getSize();
+
+	for (size_t i = 0; i < len; ++i) {
+		char ch = str[i];
+		if (ch < '0' || ch > '9') {
+			throw std::invalid_argument("Invalid character in string-to-uint conversion.");
+		}
+		result = result * 10 + (ch - '0');
+	}
+
+	return result;
+}
+

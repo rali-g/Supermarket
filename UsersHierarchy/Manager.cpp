@@ -38,6 +38,25 @@ void Manager::writeCodeToFile() const
 	ofs.close();
 }
 
+const MyString& Manager::readCodeFromFile()
+{
+	char buff[1024];
+	MyString filename = MyString(uintToStr(getId(), buff)) + "_special_code.txt";
+
+	std::ifstream ifs(filename.c_str(), std::ios::in);
+	if (!ifs.is_open()) {
+		throw std::runtime_error("Cannot open file!");
+	}
+
+	char line[1024];
+	ifs.getline(line, 1024);
+
+	specialCode = MyString(line);
+
+	ifs.close();
+	return specialCode;
+}
+
 void Manager::writeToFile(std::ofstream& ofs) const
 {
 	Employee::writeToFile(ofs);

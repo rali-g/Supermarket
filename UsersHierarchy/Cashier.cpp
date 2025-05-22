@@ -4,6 +4,16 @@ Cashier::Cashier(const MyString& firstName, const MyString& secondName, const My
 	const MyString& password, int age) :
 	Employee(firstName, secondName, phoneNumber, password, age) {}
 
+unsigned Cashier::getWarningPoints() const
+{
+	unsigned sum = 0;
+	for (int i = 0; i < warnings.size(); i++) {
+		unsigned value = static_cast<int>(warnings[i].getSeverity());
+		sum += value;
+	}
+	return sum;
+}
+
 const unsigned Cashier::getTransactionCount() const
 {
 	return transactionCount;

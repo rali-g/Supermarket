@@ -3,18 +3,19 @@
 class ProductsByWeight : public Product
 {
 private:
-    double availableKilograms = 0;
+    unsigned availableKilograms = 0;
 
 public:
     ProductsByWeight() = default;
     ProductsByWeight(const MyString& name, const Category& category,
-        double price, double discount, double availableKilograms);
+        double price, unsigned availableKilograms);
     ProductsByWeight(MyString&& name, Category&& category,
-        double price, double discount, double availableKilograms);
+        double price, unsigned availableKilograms);
 
-    double getAvailableKilograms() const;
-    void setAvailableKilograms(double kilograms);
+    unsigned getQuantity() const override;
+    void setQuantity(unsigned quantity) override;
 
+    void edit() override;
     void printFormatted() const override;
     void print() const override;
     Product* clone() const override;

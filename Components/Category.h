@@ -22,6 +22,7 @@ public:
 
     void setCategoryName(const MyString& categoryName);
     void setDescription(const MyString& description);
+    void editCategory();
 
     void print() const;
 

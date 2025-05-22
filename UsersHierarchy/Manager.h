@@ -19,6 +19,7 @@ public:
 	bool isValidSpecialCode(const MyString& specialCode) const;
 
 	void writeCodeToFile() const;
+	const MyString&  readCodeFromFile();
 	void writeToFile(std::ofstream& ofs) const;
 	void readFromFile(std::ifstream& ifs);
 

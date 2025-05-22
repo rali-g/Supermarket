@@ -1,7 +1,7 @@
 #include "Transaction.h"
 #include "../../Helpers/Helpers.h" 
 
-unsigned Transaction::counter = 100;
+unsigned Transaction::counter = 1;
 
 Transaction::Transaction() {
     getFormattedDate();

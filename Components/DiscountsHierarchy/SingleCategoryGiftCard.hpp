@@ -7,7 +7,7 @@ private:
 public:
 	SingleCategoryGiftCard() = default;
 	SingleCategoryGiftCard(double percentage, unsigned categoryId) : GiftCard(percentage) {
-		setcategoryId(categoryId);
+		setCategoryId(categoryId);
 	}
 	bool meetsDiscountCriteria(const Product& product) const override {
 		if (product.getCategory().getId() == categoryId) {
@@ -16,7 +16,7 @@ public:
 		return false;
 	}
 
-	void setcategoryId(unsigned categoryId) {
+	void setCategoryId(unsigned categoryId) {
 		this->categoryId = categoryId;
 	}
 

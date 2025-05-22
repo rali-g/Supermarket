@@ -59,6 +59,29 @@ void Category::setDescription(const MyString& description) {
     this->description = description;
 }
 
+void Category::editCategory()
+{
+    std::cout << "Enter an option: \n";
+    std::cout << "1. Edit category name\n2. Edit description\n";
+    size_t option = 0;
+    std::cin >> option;
+    if (option == 1) {
+        std::cout << "Enter category name: ";
+        MyString name;
+        std::cin >> name;
+        setCategoryName(name);
+    }
+    else if (option == 2) {
+        std::cout << "Enter description: ";
+        MyString description;
+        std::cin >> description;
+        setDescription(description);
+    }
+    else {
+        std::cout << "Invalid operation! Try again!\n";
+    }
+}
+
 void Category::print() const {
     std::cout << "Category: " << getCategoryName() << std::endl;
     std::cout << "Description: " << getDescription() << std::endl;

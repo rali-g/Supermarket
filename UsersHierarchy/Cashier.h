@@ -16,6 +16,7 @@ public:
     Cashier(const MyString& firstName,const MyString& secondName,const MyString& phoneNumber,
         const MyString& password,int age);
 
+	unsigned getWarningPoints() const;
 	const unsigned getTransactionCount() const;
 	const MyVector<Warning>& getWarnings() const;
 	const Queue<Severity>& getQueue() const;

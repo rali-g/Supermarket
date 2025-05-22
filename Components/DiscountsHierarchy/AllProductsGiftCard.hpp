@@ -4,6 +4,7 @@ class AllProductsGiftCard : public GiftCard
 {
 public:
 	AllProductsGiftCard() = default;
+	AllProductsGiftCard(double percent) : GiftCard(percent) {}
 	bool meetsDiscountCriteria(const Product& product) const override {
 		return true;
 	}

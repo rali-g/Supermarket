@@ -10,6 +10,9 @@
 #include "../Components/DiscountsHierarchy/GiftCardFactory.h"
 #include "../ProductsHierarchy/ProductsByUnit.h"
 #include "../ProductsHierarchy/ProductsByWeight.h"
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 class Supermarket {
 private:
@@ -47,6 +50,8 @@ private:
 
 	int findEmployeeById(unsigned id) const;
 	int findProductById(unsigned id) const;
+	int findCategoryById(unsigned id) const;
+	Category* findCategory(const MyString& name, const MyString& description);
 
 	bool employeeExists(const Employee& e) const;
 	bool productExists(const Product& product) const;
@@ -65,19 +70,16 @@ public:
 	void addManager(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber,
 		const MyString& password, unsigned age);
 	void addTransaction(unsigned cashierId, int totalAmount, const MyString& date, const MyString& receiptFileName);
-	void addCategory(const MyString& categoryName, const MyString& description);
 	void addProductByUnit(const MyString& name, const Category& category,
-		double price, double discount, unsigned availableQuantity);
+		double price, unsigned availableQuantity);
 	void addProductByWeight(const MyString& name, const Category& category,
-		double price, double discount, double availableKilograms);
+		double price, unsigned availableKilograms);
 	void addSingleCategoryGiftCard(double percentage, unsigned categoryId);
 	void addMultipleCategoryGiftCard(double percentage, const MyVector<unsigned>& categoryIds);
 	void addAllProductsGiftCard();
 
 	void _register(const UserType& type, const MyString& firstName, const MyString& lastName, 
 		const MyString& phoneNumber, unsigned age, const MyString& password);
-	void _approveRegistration(unsigned id);
-	void _disapproveRegistration(unsigned id);
 	void login(unsigned id, const MyString& password);
 	void logout();
 	void leave(unsigned id);
@@ -88,12 +90,29 @@ public:
 	const MyVector<polymorphic_ptr<Product>>& getProducts() const;
 	const MyVector<polymorphic_ptr<GiftCard>>& getDiscounts() const;
 
+	//manager commands
+	void listWarnedCahiers(unsigned points) const;
+	void listPending() const;
+	void warnCashier(unsigned cashierId, unsigned points, const MyString& description);
+	void promoteCashier(unsigned cashierId, const MyString& specialCode);
+	void _approveRegistration(unsigned id, const MyString& specialCode);
+	void _disapproveRegistration(unsigned id, const MyString& specialCode);
+	void fireCashier(unsigned cashierId, const MyString& specialCode);
+	void addCategory(const MyString& name, const MyString& description);
+	void editCategory(unsigned categoryId);
+	void deleteCategory(unsigned categoryId);
+	void addProduct(const ProductType& type);
+	void editProduct(unsigned productId);
+	void deleteProduct(unsigned productId);
+	void _loadProducts(const MyString& fileName);
+	void _loadGiftCards(const MyString& fileName);
+
+	//cashier commands
+
 	void listUserData() const;
 	void listEmployees() const;
 	void listProducts() const;
 	void listTransactions() const;
 	void listGiftCards() const;
 	void listProductsByCategory(const Category& category) const;
-
-	void addWarningToCashier(unsigned managerId, unsigned cashierId, const Warning& warning);
 };

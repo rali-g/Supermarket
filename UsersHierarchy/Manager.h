@@ -23,8 +23,6 @@ public:
 	void writeToFile(std::ofstream& ofs) const;
 	void readFromFile(std::ifstream& ifs);
 
-	const MyString& getSpecialCode() const;
-
 	void whoAmI() const override;
 	Employee* clone() const override;
 	void print() const override;

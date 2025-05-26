@@ -36,38 +36,55 @@ void ProductsByUnit::readFromFile(std::ifstream& ifs)
     ifs.read((char*)&availableQuantity, sizeof(availableQuantity));
 }
 
-void ProductsByUnit::edit()
+void ProductsByUnit::edit(const MyVector<Category> categories)
 {
-    Product::edit();
-	std::cout << "4. Enter available quantity: ";
-	int option = 0;
-	std::cin >> option;
-	MyString current;
-	if (option == 1) {
-		std::cout << "Enter product name: ";
-		std::cin >> current;
-		setProductName(current);
-	}
-	else if (option == 2) {
-		std::cout << "Enter category: ";
-		Category category;
-		category.editCategory();
-		setCategory(category);
-	}
-	else if (option == 3) {
-		std::cout << "Enter price: ";
-		unsigned price = 0;
-		std::cin >> price;
-		setPrice(price);
-	}
-	else if (option == 4) {
-		std::cout << "Enter quantity: ";
-		unsigned quantity = 0;
-		std::cin >> quantity;
-		setQuantity(quantity);
-	}
-	else {
-		"Invalid option! Try again!";
+    Product::edit(categories);
+	std::cout << "4. Enter available quantity: \n";
+	std::cout << "------Enter -1 to exit--------\n";
+	MyString option;
+	Category category;
+	while (true) {
+		std::cout << "\nEnter option: ";
+		std::cin >> option;
+		MyString current;
+		if (option == "1") {
+			std::cout << "Enter product name: ";
+			std::cin >> current;
+			setProductName(current);
+		}
+		else if (option == "2") {
+			category.editCategory();
+			setCategory(category);
+		}
+		else if (option == "3") {
+			std::cout << "\nEnter category index: \n";
+			for (int i = 0; i < categories.size(); i++) {
+				std::cout << i << ". ";
+				categories[i].print();
+			}
+			int ind = 0;
+			std::cin >> ind;
+			setCategory(categories[ind]);
+		}
+		else if (option == "4") {
+			std::cout << "Enter price: ";
+			unsigned price = 0;
+			std::cin >> price;
+			setPrice(price);
+		}
+		else if (option == "5") {
+			std::cout << "Enter quantity: ";
+			unsigned quantity = 0;
+			std::cin >> quantity;
+			setQuantity(quantity);
+		}
+		else if (option == "-1") {
+			return;
+		}
+		else {
+			std::cout << "Invalid option! Try again!";
+			return;
+		}
 	}
 }
 

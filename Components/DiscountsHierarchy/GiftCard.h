@@ -32,10 +32,12 @@ public:
 
 	void setPercentage(double percentage);
 	double getPercentage() const;
+	const MyString& getSpecialCode() const;
 	unsigned getId() const;
 
 	bool isValidSpecialCode(const MyString& specialCode) const;
 	virtual bool meetsDiscountCriteria(const Product& product) const = 0;
+	virtual void getCategories() const = 0;
 
 	virtual void writeToFile(std::ofstream& ofs) const = 0;
 	virtual void readFromFile(std::ifstream& ifs) = 0;

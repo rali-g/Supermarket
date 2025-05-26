@@ -33,10 +33,15 @@ public:
 		ifs.read((char*)&categoryId, sizeof(categoryId));
 	}
 
+	void getCategories() const override {
+		std::cout << categoryId << "\n";
+	}
+
 	GiftCard* clone() const override {
 		return new SingleCategoryGiftCard(*this);
 	}
 	void print() const override {
+		std::cout << "SingleCategoryGiftCard\n";
 		GiftCard::print();
 		std::cout << std::endl << categoryId;
 	}

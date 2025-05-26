@@ -1,6 +1,7 @@
 #pragma once
 #include "../Helpers/MyString.h"
 #include "../Components/Category.h"
+#include "../Helpers/MyVector.hpp"
 
 enum class ProductType
 {
@@ -14,7 +15,7 @@ class Product
 {
 private:
 	MyString productName = "Unknown";
-	Category* category;
+	Category* category = nullptr;
 	double price = 0.0;
 
 	unsigned id = 0;;
@@ -25,7 +26,6 @@ public:
 	Product(); 
 
 	Product(const MyString& name, const Category& category, double price);
-	Product(MyString&& name, Category&& category, double price);
 	Product(const Product& other);
 	Product& operator=(const Product& other);
 
@@ -42,10 +42,10 @@ public:
 	virtual unsigned getQuantity() const = 0;
 	virtual void writeToFile(std::ofstream& ofs) const = 0;
 	virtual void readFromFile(std::ifstream& ifs) = 0;
-	virtual void edit() = 0;
+	virtual void edit(const MyVector<Category> categories) = 0;
 
 	virtual void printFormatted() const = 0;
 	virtual void print() const = 0;
 	virtual Product* clone() const = 0;
-	virtual ~Product() = default;
+	virtual ~Product();
 };

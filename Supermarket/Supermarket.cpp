@@ -11,10 +11,9 @@ int Supermarket::findEmployeeById(unsigned id) const {
 	return -1;
 }
 
-Category* Supermarket::findCategory(const MyString& name, const MyString& description) {
+Category* Supermarket::findCategoryByName(const MyString& name) {
 	for (size_t i = 0; i < categories.size(); i++) {
-		if (categories[i].getCategoryName() == name &&
-			categories[i].getDescription() == description) {
+		if (categories[i].getCategoryName() == name) {
 			return &categories[i];
 		}
 	}
@@ -33,7 +32,7 @@ bool Supermarket::employeeExists(const Employee& e) const
 
 bool Supermarket::productExists(const Product& product) const
 {
-	for (int i = 0; i < employees.size(); ++i) {
+	for (int i = 0; i < products.size(); ++i) {
 		if (products[i]->getId() == product.getId()) {
 			return true;
 		}
@@ -64,7 +63,7 @@ bool Supermarket::transactionExists(const Transaction& t) const
 bool Supermarket::categoryExists(const Category& c) const
 {
 	for (int i = 0; i < categories.size(); ++i) {
-		if (categories[i].getId() == c.getId()) {
+		if (categories[i].getCategoryName() == c.getCategoryName()) {
 			return true;
 		}
 	}
@@ -85,6 +84,16 @@ int Supermarket::findCategoryById(unsigned id) const
 {
 	for (int i = 0; i < categories.size(); i++) {
 		if (categories[i].getId() == id) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+int Supermarket::findDiscountBySpecialCode(const MyString& code) const
+{
+	for (int i = 0; i < discounts.size(); i++) {
+		if (discounts[i].get()->isValidSpecialCode(code)) {
 			return i;
 		}
 	}
@@ -116,7 +125,7 @@ void Supermarket::_register(const UserType& type, const MyString& firstName, con
 	}
 }
 
-void Supermarket::_approveRegistration(unsigned id, const MyString& specialCode)
+void Supermarket::approveRegistration(unsigned id, const MyString& specialCode)
 {
 	if (loggedData.type == UserType::Manager && loggedData.loggedManager->readCodeFromFile() == specialCode) {
 		for (int i = 0; i < pendingRequests.size(); i++) {
@@ -130,7 +139,7 @@ void Supermarket::_approveRegistration(unsigned id, const MyString& specialCode)
 	throw std::exception("User is not manager! Permission denied!");
 }
 
-void Supermarket::_disapproveRegistration(unsigned id, const MyString& specialCode)
+void Supermarket::disapproveRegistration(unsigned id, const MyString& specialCode)
 {
 	if (loggedData.type == UserType::Manager && loggedData.loggedManager->readCodeFromFile() == specialCode) {
 		for (int i = 0; i < pendingRequests.size(); i++) {
@@ -140,21 +149,20 @@ void Supermarket::_disapproveRegistration(unsigned id, const MyString& specialCo
 			}
 		}
 	}
-	throw std::exception("User is not manager! Permission denied!");
+	throw std::exception("User is not manager! Permission denied!\n");
 }
 
 void Supermarket::login(unsigned id, const MyString& password)
 {
 	if (loggedData.logged)
 	{
-		throw std::invalid_argument("Someone's logged in!");
+		throw std::invalid_argument("Someone's logged in!\n");
 	}
 
 	for (size_t i = 0; i < employees.size(); i++)
 	{
 		if (isLogInDataValid(id, password, employees[i].get()))
 		{
-			loggedData.logged = employees[i].get();
 			loggedData.logged = employees[i].get();
 			if (loggedData.loggedManager = dynamic_cast<Manager*>(employees[i].get()))
 			{
@@ -164,15 +172,17 @@ void Supermarket::login(unsigned id, const MyString& password)
 			{
 				loggedData.type = UserType::Cashier;
 			}
+			std::cout << "You successfully logged in!\n";
 			return;
 		}
 	}
-	throw std::invalid_argument("Employee with these data details doesn't exist!");
+	throw std::invalid_argument("Permission denied!\n");
 }
 
 void Supermarket::logout()
 {
 	loggedData = LoggedData();
+	std::cout << "You successfully logged out!\n";
 }
 
 void Supermarket::leave(unsigned id) {
@@ -209,9 +219,10 @@ void Supermarket::listWarnedCahiers(unsigned points) const
 	for (int i = 0; i < employees.size(); i++)
 	{
 		const Cashier* cashier = dynamic_cast<const Cashier*>(employees[i].get());
-		if (cashier && cashier->getWarningPoints() >= points)
+		if (cashier && cashier->getWarningPoints() > points)
 		{
 			cashier->print(); 
+			std::cout << std::endl;
 		}
 	}
 }
@@ -220,9 +231,7 @@ void Supermarket::listPending() const
 {
 	int ind = 0;
 	for (int i = 0; i < pendingRequests.size(); i++) {
-		ind = findEmployeeById(pendingRequests[i].getId());
-		employees[ind].get()->print();
-		std::cout << std::endl;
+		pendingRequests[i].print();
 	}
 }
 
@@ -288,15 +297,29 @@ void Supermarket::listUserData() const
 
 void Supermarket::listEmployees() const {
 	std::cout << "Employees:\n";
-	for (int i = 0; i < employees.size(); ++i) {
-		employees[i]->print();
+	for (int i = 0; i < employees.size(); i++) {
+		if (employees[i]) {
+			employees[i]->print();
+			std::cout << std::endl;
+		}
+	}
+}
+
+void Supermarket::listCategories() const
+{
+	std::cout << "Categories:\n";
+	for (int i = 0; i < categories.size(); ++i) {
+		categories[i].print();
 	}
 }
 
 void Supermarket::listProducts() const {
-	std::cout << "Products:\n";
+	std::cout << "\nProducts:\n";
 	for (int i = 0; i < products.size(); ++i) {
-		products[i]->printFormatted();
+		std::cout << products[i].get()->getId() << ". ";
+		if (products[i]) {
+			products[i]->printFormatted();
+		}
 	}
 }
 
@@ -310,7 +333,11 @@ void Supermarket::listTransactions() const {
 void Supermarket::listGiftCards() const {
 	std::cout << "Gift Cards:\n";
 	for (int i = 0; i < discounts.size(); ++i) {
-		discounts[i]->print();
+		if (discounts[i]) {
+			discounts[i]->print();
+			std::cout << std::endl << discounts[i].get()->getSpecialCode();
+			std::cout << "\n\n";
+		}
 	}
 }
 
@@ -556,26 +583,30 @@ Supermarket::Supermarket()
 	readFromFile();
 }
 
-Supermarket::~Supermarket()
+//Supermarket::~Supermarket()
+//{
+//	writeToFile();
+//}
+
+Supermarket& Supermarket::getInstance()
 {
-	writeToFile();
+	static Supermarket instance;
+	return instance;
 }
 
 void Supermarket::addCashier(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber, const MyString& password, unsigned age)
 {
-	Employee* client = new Cashier(firstName, secondName, phoneNumber, password, age);
-	employees.push_back(client);
+	employees.push_back(polymorphic_ptr<Employee>(new Cashier(firstName, secondName, phoneNumber, password, age)));
 }
 
 void Supermarket::addManager(const MyString& firstName, const MyString& secondName, const MyString& phoneNumber, const MyString& password, unsigned age)
 {
-	Employee* manager = new Manager(firstName, secondName, phoneNumber, password, age);
-	employees.push_back(manager);
+	employees.push_back(polymorphic_ptr<Employee>(new Manager(firstName, secondName, phoneNumber, password, age)));
 }
 
-void Supermarket::addTransaction(unsigned cashierId, int totalAmount, const MyString& date, const MyString& receiptFileName)
+void Supermarket::addTransaction(unsigned cashierId, int totalAmount, const MyString& receiptFileName)
 {
-	Transaction tr(cashierId, totalAmount, date, receiptFileName);
+	Transaction tr(cashierId, totalAmount, receiptFileName);
 	transactions.push_back(tr);
 }
 
@@ -590,17 +621,24 @@ void Supermarket::fireCashier(unsigned cashierId, const MyString& specialCode)
 		employees.erase(ind);
 		return;
 	}
-	throw std::invalid_argument("Wrong manager data");
+	throw std::invalid_argument("\nPermission denied!");
 }
 
 void Supermarket::addCategory(const MyString& categoryName, const MyString& description)
 {
-	Category c(categoryName, description);
-	categories.push_back(c);
+	if (loggedData.logged && loggedData.type == UserType::Manager) {
+		Category c(categoryName, description);
+		categories.push_back(c);
+		return;
+	}
+	throw std::invalid_argument("\nPermission denied!");
 }
 
 void Supermarket::editCategory(unsigned categoryId)
 {
+	if (loggedData.type != UserType::Manager) {
+		throw std::invalid_argument("\nPermission denied!");
+	}
 	int ind = findCategoryById(categoryId);
 	if (ind == -1) {
 		throw std::invalid_argument("Invalid category id!");
@@ -611,11 +649,11 @@ void Supermarket::editCategory(unsigned categoryId)
 void Supermarket::deleteCategory(unsigned categoryId)
 {
 	if (loggedData.type != UserType::Manager) {
-		throw std::invalid_argument("Permission denied!");
+		throw std::invalid_argument("\nPermission denied!");
 	}
 	int ind = findCategoryById(categoryId);
 	if (ind == -1) {
-		throw std::invalid_argument("Invalid category id!");
+		throw std::invalid_argument("\nInvalid category id!");
 	}
 	for (int i = 0; i < products.size(); i++) {
 		if (products[i].get()->getCategory().getId() == categoryId) {
@@ -628,36 +666,34 @@ void Supermarket::deleteCategory(unsigned categoryId)
 
 void Supermarket::addProductByUnit(const MyString& name, const Category& category, double price, unsigned availableQuantity)
 {
-	Product* productByUnit = new ProductsByUnit(name, category, price, availableQuantity);
-	products.push_back(productByUnit);
+	products.push_back(new ProductsByUnit(name, category, price, availableQuantity));
 }
 
 void Supermarket::addProductByWeight(const MyString& name, const Category& category, double price, unsigned availableKilograms)
 {
-	Product* productByWeight = new ProductsByWeight(name, category, price, availableKilograms);
-	products.push_back(productByWeight);
+	products.push_back(new ProductsByWeight(name, category, price, availableKilograms));
 }
 
 void Supermarket::addSingleCategoryGiftCard(double percentage, unsigned categoryId)
 {
-	GiftCard* singleCard = new SingleCategoryGiftCard(percentage, categoryId);
-	discounts.push_back(singleCard);
+	discounts.push_back(new SingleCategoryGiftCard(percentage, categoryId));
 }
 
 void Supermarket::addMultipleCategoryGiftCard(double percentage, const MyVector<unsigned>& categoryIds)
 {
-	GiftCard* multipleCard = new MultipleCategoryGiftCard(percentage, categoryIds);
-	discounts.push_back(multipleCard);
+	discounts.push_back(new MultipleCategoryGiftCard(percentage, categoryIds));
 }
 
-void Supermarket::addAllProductsGiftCard()
+void Supermarket::addAllProductsGiftCard(double percent)
 {
-	GiftCard* allCard = new AllProductsGiftCard();
-	discounts.push_back(allCard);
+	discounts.push_back(new AllProductsGiftCard(percent));
 }
 
 void Supermarket::addProduct(const ProductType& type)
 {
+	if (loggedData.type != UserType::Manager) {
+		throw std::invalid_argument("\nPermission denied!");
+	}
 	switch (type) {
 	case ProductType::ProductsByUnit: {
 		ProductsByUnit p;
@@ -673,11 +709,17 @@ void Supermarket::addProduct(const ProductType& type)
 
 void Supermarket::editProduct(unsigned productId)
 {
+	if (loggedData.type != UserType::Manager) {
+		throw std::invalid_argument("\nPermission denied!");
+	}
 	int ind = findProductById(productId);
 	if (ind == -1) {
 		throw std::invalid_argument("Invalid product Id");
 	}
-	products[ind].get()->edit();
+	products[ind].get()->edit(categories);
+	if (!categoryExists(products[ind].get()->getCategory())){
+		categories.push_back(products[ind].get()->getCategory());
+	}
 }
 
 void Supermarket::deleteProduct(unsigned productId)
@@ -689,7 +731,7 @@ void Supermarket::deleteProduct(unsigned productId)
 	products.erase(ind);
 }
 
-void Supermarket::_loadProducts(const MyString& fileName)
+void Supermarket::loadProducts(const MyString& fileName)
 {
 	std::ifstream ifs(fileName.c_str());
 	if (!ifs.is_open()) return;
@@ -703,59 +745,31 @@ void Supermarket::_loadProducts(const MyString& fileName)
 			char* productTypeStr = std::strtok(nullptr, ":");
 			if (!productTypeStr) continue;
 
+			char* nameStr = std::strtok(nullptr, ":");
+			char* categoryNameStr = std::strtok(nullptr, ":");
+			char* categoryDescStr = std::strtok(nullptr, ":");
+			char* priceStr = std::strtok(nullptr, ":");
+			char* quantityStr = std::strtok(nullptr, ":");
+
+			if (!nameStr || !categoryNameStr || !priceStr || !quantityStr) continue;
+
+			MyString name(nameStr);
+			MyString categoryName(categoryNameStr);
+			double price = strtod(priceStr, nullptr);
+
+			Category* category = findCategoryByName(categoryName);
+			if (!category) {
+				throw std::invalid_argument("Category not found while loading product.");
+			}
+
 			if (std::strcmp(productTypeStr, "ProductsByUnit") == 0) {
-				char* nameStr = std::strtok(nullptr, ":");
-				char* categoryNameStr = std::strtok(nullptr, ":");
-				char* categoryDescStr = std::strtok(nullptr, ":");
-				char* priceStr = std::strtok(nullptr, ":");
-				char* availableQuantityStr = std::strtok(nullptr, ":");
-
-				if (!nameStr || !categoryNameStr || !categoryDescStr || !priceStr || !availableQuantityStr) continue;
-
-				double price = strtod(priceStr, nullptr);
-				unsigned availableQuantity = (unsigned)strtoul(availableQuantityStr, nullptr, 10);
-
-				MyString name(nameStr);
-				MyString categoryName(categoryNameStr);
-				MyString categoryDesc(categoryDescStr);
-
-				Category* category = findCategory(categoryName, categoryDesc);
-
-				if (!category) {
-					Category newCategory(categoryName, categoryDesc);
-					categories.push_back(newCategory);
-					category = &categories[categories.size() - 1];
-				}
-
-				ProductsByUnit* product = new ProductsByUnit(name, *category, price, availableQuantity);
+				unsigned availableQuantity = static_cast<unsigned>(strtoul(quantityStr, nullptr, 10));
+				auto* product = new ProductsByUnit(name, *category, price, availableQuantity);
 				products.push_back(polymorphic_ptr<Product>(product));
-
 			}
 			else if (std::strcmp(productTypeStr, "ProductsByWeight") == 0) {
-				char* nameStr = std::strtok(nullptr, ":");
-				char* categoryNameStr = std::strtok(nullptr, ":");
-				char* categoryDescStr = std::strtok(nullptr, ":");
-				char* priceStr = std::strtok(nullptr, ":");
-				char* availableKgStr = std::strtok(nullptr, ":");
-
-				if (!nameStr || !categoryNameStr || !categoryDescStr || !priceStr || !availableKgStr) continue;
-
-				double price = strtod(priceStr, nullptr);
-				double availableKg = strtod(availableKgStr, nullptr);
-
-				MyString name(nameStr);
-				MyString categoryName(categoryNameStr);
-				MyString categoryDesc(categoryDescStr);
-
-				Category* category = findCategory(categoryName, categoryDesc);
-
-				if (!category) {
-					Category newCategory(categoryName, categoryDesc);
-					categories.push_back(newCategory);
-					category = &categories[categories.size() - 1];
-				}
-
-				ProductsByWeight* product = new ProductsByWeight(name, *category, price, availableKg);
+				double availableKg = strtod(quantityStr, nullptr);
+				auto* product = new ProductsByWeight(name, *category, price, availableKg);
 				products.push_back(polymorphic_ptr<Product>(product));
 			}
 		}
@@ -771,18 +785,16 @@ void Supermarket::_loadProducts(const MyString& fileName)
 
 			int idx = findProductById(productId);
 			if (idx == -1) {
-				throw std::invalid_argument("Product is not in storage. Could not load new quantity");
-				continue;
+				throw std::invalid_argument("Product is not in storage. Could not load new quantity.");
 			}
 
 			Product* prod = products[idx].get();
 			prod->setQuantity(prod->getQuantity() + quantity);
-
 		}
 	}
 }
 
-void Supermarket::_loadGiftCards(const MyString& fileName)
+void Supermarket::loadGiftCards(const MyString& fileName)
 {
 	std::ifstream ifs(fileName.c_str());
 	if (!ifs.is_open()) {
@@ -860,3 +872,4 @@ void Supermarket::_loadGiftCards(const MyString& fileName)
 		}
 	}
 }
+

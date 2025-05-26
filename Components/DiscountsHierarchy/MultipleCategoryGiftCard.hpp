@@ -31,6 +31,12 @@ public:
         return categoryIds;
     }
 
+    void getCategories() const override {
+        for (int i = 0; i < categoryIds.size(); i++) {
+            std::cout << categoryIds[i] << "\n";
+        }
+    }
+
     void writeToFile(std::ofstream& ofs) const override {
         GiftCard::writeToFile(ofs);
 
@@ -61,8 +67,9 @@ public:
     }
 
     void print() const override {
+        std::cout << "MultipleCategoryGiftCard\n";
         GiftCard::print();
-        std::cout << "Categories: ";
+        std::cout << "\nCategories: \n";
         for (int i = 0; i < categoryIds.size(); i++) {
             std::cout << categoryIds[i] << " ";
         }

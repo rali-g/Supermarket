@@ -15,7 +15,7 @@ public:
     unsigned getQuantity() const override;
     void setQuantity(unsigned quantity) override;
 
-    void edit() override;
+    void edit(const MyVector<Category> categories) override;
     void printFormatted() const override;
     void print() const override;
     Product* clone() const override;

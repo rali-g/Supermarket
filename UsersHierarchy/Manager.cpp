@@ -12,6 +12,7 @@ Manager::Manager(const MyString& firstName, const MyString& secondName,
 	const MyString& phoneNumber, const MyString& password, int age) : Employee(firstName, secondName, phoneNumber, password, age)
 {
 	generateCode();
+	writeCodeToFile();
 }
 
 Manager::Manager(MyString&& firstName, MyString&& secondName, MyString&& phoneNumber, MyString&& password, int age)
@@ -33,7 +34,7 @@ void Manager::writeCodeToFile() const
 		throw std::runtime_error("Can not open file!");
 	}
 
-	ofs << getSpecialCode() << std::endl;
+	ofs << specialCode << std::endl;
 
 	ofs.close();
 }
@@ -69,11 +70,6 @@ void Manager::readFromFile(std::ifstream& ifs)
 	specialCode = readStringFromFile(ifs);
 }
 
-const MyString& Manager::getSpecialCode() const
-{
-	return specialCode;
-}
-
 void Manager::whoAmI() const
 {
 	std::cout << "Status: Manager" << std::endl;
@@ -86,6 +82,7 @@ Employee* Manager::clone() const
 
 void Manager::print() const
 {
+	std::cout << "=== Manager ===\n";
 	printBasicInfo();
 }
 

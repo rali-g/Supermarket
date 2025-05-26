@@ -24,8 +24,7 @@ Category::Category(const Category& other) {
     categoryName = other.categoryName;
     description = other.description;
 
-    id = counter;
-    counter++;
+    id = other.id;
 }
 
 Category Category::operator=(const Category& other) {
@@ -33,8 +32,7 @@ Category Category::operator=(const Category& other) {
         categoryName = other.categoryName;
         description = other.description;
 
-        id = counter;
-        counter++;
+        id = other.id;
     }
     return *this;
 }
@@ -61,24 +59,30 @@ void Category::setDescription(const MyString& description) {
 
 void Category::editCategory()
 {
-    std::cout << "Enter an option: \n";
-    std::cout << "1. Edit category name\n2. Edit description\n";
-    size_t option = 0;
-    std::cin >> option;
-    if (option == 1) {
-        std::cout << "Enter category name: ";
-        MyString name;
-        std::cin >> name;
-        setCategoryName(name);
-    }
-    else if (option == 2) {
-        std::cout << "Enter description: ";
-        MyString description;
-        std::cin >> description;
-        setDescription(description);
-    }
-    else {
-        std::cout << "Invalid operation! Try again!\n";
+    std::cout << "\n1. Edit category name\n2. Edit description\n";
+    MyString option;
+    while (true) {
+        std::cout << "\nEnter option: ";
+        std::cin >> option;
+        if (option == "1") {
+            std::cout << "Enter category name: ";
+            MyString name;
+            std::cin >> name;
+            setCategoryName(name);
+        }
+        else if (option == "2") {
+            std::cout << "Enter description: ";
+            MyString description;
+            std::cin >> description;
+            setDescription(description);
+        }
+        else if (option == "-1") {
+            return;
+        }
+        else {
+            std::cout << "Invalid operation! Try again!\n";
+            return;
+        }
     }
 }
 

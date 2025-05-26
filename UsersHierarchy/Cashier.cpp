@@ -14,7 +14,7 @@ unsigned Cashier::getWarningPoints() const
 	return sum;
 }
 
-const unsigned Cashier::getTransactionCount() const
+unsigned Cashier::getTransactionCount() const
 {
 	return transactionCount;
 }
@@ -44,6 +44,11 @@ void Cashier::removeElementFromQueue()
 		}
 	}
 	q.dequeue();
+}
+
+void Cashier::incrementTransactionCount()
+{
+	this->transactionCount++;
 }
 
 void Cashier::setTransactionCount(unsigned transactionCount)

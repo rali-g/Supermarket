@@ -61,8 +61,8 @@ Employee::Employee(const Employee& other)
 	password = other.password;
 	age = other.age;
 
-	id = counter;
-	counter++;
+	id = other.id;
+	counter = id;
 }
 
 
@@ -75,8 +75,8 @@ Employee& Employee::operator=(const Employee& other)
 		password = other.password;
 		age = other.age;
 
-		id = counter;
-		counter++;
+		id = other.id;
+		counter = id;
 	}
 	return *this;
 }

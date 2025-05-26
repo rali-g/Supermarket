@@ -5,17 +5,15 @@ unsigned Transaction::counter = 1;
 
 Transaction::Transaction() {
     getFormattedDate();
-    id = counter;
-    counter++;
 }
 
-Transaction::Transaction(unsigned cashierId, int totalAmount, const MyString& date, const MyString& receiptFileName)
-    : cashierId(cashierId), totalAmount(totalAmount), date(date), receiptFileName(receiptFileName), id(counter++) {
+Transaction::Transaction(unsigned cashierId, int totalAmount,  const MyString& receiptFileName)
+    : cashierId(cashierId), totalAmount(totalAmount), receiptFileName(receiptFileName), id(counter++) {
     getFormattedDate();
 }
 
-Transaction::Transaction(unsigned cashierId, int totalAmount, MyString&& date, MyString&& receiptFileName)
-    : cashierId(cashierId), totalAmount(totalAmount), date(std::move(date)), 
+Transaction::Transaction(unsigned cashierId, int totalAmount, MyString&& receiptFileName)
+    : cashierId(cashierId), totalAmount(totalAmount), 
     receiptFileName(std::move(receiptFileName)), id(counter++) {
     getFormattedDate();
 }
@@ -23,8 +21,7 @@ Transaction::Transaction(unsigned cashierId, int totalAmount, MyString&& date, M
 Transaction::Transaction(const Transaction& other) : cashierId(other.cashierId),
     totalAmount(other.totalAmount), date(other.date), receiptFileName(other.receiptFileName) {
     getFormattedDate();
-    id = counter;
-    counter++;
+    id = other.id;
 }
 
 Transaction& Transaction::operator=(const Transaction& other)
@@ -36,8 +33,7 @@ Transaction& Transaction::operator=(const Transaction& other)
         receiptFileName = other.receiptFileName;
         
         getFormattedDate();
-        id = counter;
-        counter++;
+        id = other.id;
     }
     return *this;
 }

@@ -65,6 +65,11 @@ double GiftCard::getPercentage() const
     return percentage;
 }
 
+const MyString& GiftCard::getSpecialCode() const
+{
+    return specialCode;
+}
+
 unsigned GiftCard::getId() const
 {
     return id;

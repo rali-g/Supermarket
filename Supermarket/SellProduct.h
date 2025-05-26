@@ -1,14 +1,13 @@
 #pragma once
-#include "Supermarket.h"
+#include "../Supermarket/Supermarket.h"
+#include "../Components/Transaction.h"
+#include <iostream>
+#include <fstream>
+#include "../Helpers/Pair.hpp"
+
+class Supermarket;
 
 class SellProduct {
-	struct PurchasedItem {
-		polymorphic_ptr<Product> product;
-		double quantity;
-	};
-	MyVector<PurchasedItem> currProducts;
 public:
-
-	SellProduct() = default;
-	void sell(Supermarket& supermarket);
+	static void sell(Supermarket& supermarketð);
 };

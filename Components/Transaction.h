@@ -16,8 +16,8 @@ private:
     void getFormattedDate();
 public:
     Transaction();
-    Transaction(unsigned cashierId, int totalAmount, const MyString& date, const MyString& receiptFileName);
-    Transaction(unsigned cashierId, int totalAmount, MyString&& date, MyString&& receiptFileName);
+    Transaction(unsigned cashierId, int totalAmount, const MyString& receiptFileName);
+    Transaction(unsigned cashierId, int totalAmount, MyString&& receiptFileName);
     Transaction(const Transaction& other);
     Transaction& operator=(const Transaction& other);
 

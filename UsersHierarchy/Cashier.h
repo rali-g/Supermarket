@@ -17,13 +17,14 @@ public:
         const MyString& password,int age);
 
 	unsigned getWarningPoints() const;
-	const unsigned getTransactionCount() const;
+	unsigned getTransactionCount() const;
 	const MyVector<Warning>& getWarnings() const;
 	const Queue<Severity>& getQueue() const;
 
 	void removeElementFromQueue();
 	void addElementToWarnings(const Warning& warning);
 
+	void incrementTransactionCount();
 	void setTransactionCount(unsigned transactionCount);
 	void setWarnings(const MyVector<Warning>& warnings);
 

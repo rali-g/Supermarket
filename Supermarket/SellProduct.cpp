@@ -7,9 +7,9 @@ void SellProduct::sell(Supermarket& supermarket)
     }
 
     double total = 0.0;
-    unsigned transactionId = supermarket.transactions.size() + 1;
-    unsigned productId = 0;
-    MyVector<Pair<Product*, unsigned>> p;
+    unsigned int transactionId = supermarket.transactions.size() + 1;
+    unsigned int productId = 0;
+    MyVector<Pair<Product*, unsigned int>> p;
 
     while (true) {
         supermarket.listProducts();
@@ -32,7 +32,7 @@ void SellProduct::sell(Supermarket& supermarket)
         }
 
         std::cout << "Enter quantity:\n";
-        unsigned quantity = 0;
+        unsigned int quantity = 0;
         std::cin >> quantity;
 
         Product* base = supermarket.products[productInd].get();
@@ -40,7 +40,7 @@ void SellProduct::sell(Supermarket& supermarket)
         p.push_back({base, quantity});
 
         if (ProductsByUnit* byUnit = dynamic_cast<ProductsByUnit*>(base)) {
-            unsigned availableQuantity = byUnit->getQuantity();
+            unsigned int availableQuantity = byUnit->getQuantity();
             if (availableQuantity < quantity) {
                 std::cout << "Not enought quantity!";
                 continue;
@@ -50,7 +50,7 @@ void SellProduct::sell(Supermarket& supermarket)
 
         }
         else if (ProductsByWeight* weightProd = dynamic_cast<ProductsByWeight*>(base)) {
-            unsigned availableKilograms = weightProd->getQuantity();
+            unsigned int availableKilograms = weightProd->getQuantity();
             if (availableKilograms < quantity) {
                 std::cout << "Not enought quantity!";
                 continue;
@@ -83,11 +83,6 @@ void SellProduct::sell(Supermarket& supermarket)
 
         for (int i = 0; i < p.size(); ++i) {
             int quantity = p[i].getRhs();
-
-            std::cout << "Product name: " << p[i].getLhs()->getProductName() << '\n';
-            std::cout << "Product category ID: " << p[i].getLhs()->getCategory().getId() << '\n';
-            std::cout << "Voucher category ID: ";
-            discount->getCategories();
             if (discount->meetsDiscountCriteria(*p[i].getLhs())) {
                 double discountPercent = discount->getPercentage();
                 double productPrice = p[i].getLhs()->getPrice();
@@ -97,14 +92,21 @@ void SellProduct::sell(Supermarket& supermarket)
                 totalDiscount += discountAmount;
             }
         }
+        if (totalDiscount > total) {
+            totalDiscount = total;
+        }
         total -= totalDiscount;
         total = std::round(total * 100) / 100.0;
-        std::cout << supermarket.discounts[discountInd].get()->getPercentage() << "% applied! Transaction complete!\n";
+        std::cout << supermarket.discounts[discountInd].get()->getPercentage() << " % applied! Transaction complete!\n";
+    }
+    else if (ch != 'n' && ch != 'N') {
+        throw std::exception("Invalid argument!");
     }
 
     char buff[1024];
     MyString receiptFile = "receipt_" + MyString(uintToStr(transactionId, buff)) + ".txt";
     Transaction t(supermarket.loggedData.logged->getId(), total, receiptFile);
+    supermarket.transactions.push_back(t);
     std::ofstream ofs(t.getReceiptFileName().c_str(), std::ios::out | std::ios::trunc);
     if (!ofs.is_open()) {
         throw std::runtime_error("Failed to open receipt file.");
@@ -117,7 +119,7 @@ void SellProduct::sell(Supermarket& supermarket)
 
     for (int i = 0; i < p.size(); ++i) {
         const Product* prod = p[i].getLhs();
-        unsigned quantity = p[i].getRhs();
+        unsigned int quantity = p[i].getRhs();
         double unitPrice = prod->getPrice();
         double totalPrice = unitPrice * quantity;
 

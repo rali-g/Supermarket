@@ -19,8 +19,6 @@ unsigned ProductsByWeight::getQuantity() const {
 }
 
 void ProductsByWeight::setQuantity(unsigned quantity) {
-    if (quantity <= 0.0)
-        throw std::invalid_argument("Available kilograms must be greater than 0.");
     availableKilograms = quantity;
 }
 

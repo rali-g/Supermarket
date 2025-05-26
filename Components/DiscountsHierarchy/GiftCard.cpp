@@ -17,9 +17,6 @@ void GiftCard::printBasicInfo() const
 GiftCard::GiftCard()
 {
     generateCode();
-
-    id = counter;
-    counter++;
 }
 
 GiftCard::GiftCard(double percentage)
@@ -29,6 +26,8 @@ GiftCard::GiftCard(double percentage)
 
     id = counter;
     counter++;
+
+    writeCodeToFile();
 }
 
 GiftCard::GiftCard(const GiftCard& other)
@@ -78,6 +77,41 @@ unsigned GiftCard::getId() const
 bool GiftCard::isValidSpecialCode(const MyString& specialCode) const
 {
     return this->specialCode == specialCode;
+}
+
+void GiftCard::writeCodeToFile() const
+{
+    char buff[1024];
+    MyString filename = MyString(uintToStr(getId(), buff)) + "_special_code.txt";
+
+    std::ofstream ofs(filename.c_str(), std::ios::out | std::ios::trunc);
+
+    if (!ofs.is_open()) {
+        throw std::runtime_error("Can not open file!");
+    }
+
+    ofs << specialCode << std::endl;
+
+    ofs.close();
+}
+
+const MyString& GiftCard::readCodeFromFile()
+{
+    char buff[1024];
+    MyString filename = MyString(uintToStr(getId(), buff)) + "_special_code.txt";
+
+    std::ifstream ifs(filename.c_str(), std::ios::in);
+    if (!ifs.is_open()) {
+        throw std::runtime_error("Cannot open file!");
+    }
+
+    char line[1024];
+    ifs.getline(line, 1024);
+
+    specialCode = MyString(line);
+
+    ifs.close();
+    return specialCode;
 }
 
 void GiftCard::writeToFile(std::ofstream& ofs) const

@@ -19,8 +19,6 @@ unsigned ProductsByUnit::getQuantity() const {
 }
 
 void ProductsByUnit::setQuantity(unsigned availableQuantity) {
-    if (availableQuantity == 0)
-        throw std::invalid_argument("Quantity must be greater than 0.");
     this->availableQuantity = availableQuantity;
 }
 

@@ -19,8 +19,7 @@
 class SellProduct;
 
 class Supermarket {
-/*private:*/
-public:
+private:
 	struct LoggedData
 	{
 		Employee* logged = nullptr;
@@ -42,7 +41,7 @@ public:
 	int findProductById(unsigned id) const;
 	int findCategoryById(unsigned id) const;
 	int findDiscountBySpecialCode(const MyString& code) const;
-	Category* findCategoryByName(const MyString& name);
+	
 
 	bool employeeExists(const Employee& e) const;
 	bool productExists(const Product& product) const;
@@ -68,9 +67,10 @@ public:
 
 	Supermarket();
 	~Supermarket() = default;
-//public:
-
+public:
 	static Supermarket& getInstance();
+
+	Category* findCategoryByName(const MyString& name);
 
 	Supermarket(const Supermarket& other) = delete;
 	Supermarket& operator=(const Supermarket& other) = delete;
@@ -118,7 +118,7 @@ public:
 	void loadGiftCards(const MyString& fileName);
 
 	//cashier commands
-
+	void sell();
 
 	void listUserData() const;
 	void listEmployees() const;

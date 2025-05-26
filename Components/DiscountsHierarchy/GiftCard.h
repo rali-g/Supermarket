@@ -39,6 +39,8 @@ public:
 	virtual bool meetsDiscountCriteria(const Product& product) const = 0;
 	virtual void getCategories() const = 0;
 
+	void writeCodeToFile() const;
+	const MyString& readCodeFromFile();
 	virtual void writeToFile(std::ofstream& ofs) const = 0;
 	virtual void readFromFile(std::ifstream& ifs) = 0;
 

@@ -6,7 +6,7 @@ class Transaction
 {
 private:
 	unsigned cashierId = 0;
-	int totalAmount = 0;
+	double totalAmount = 0;
 	MyString date = "Unknown";
 	MyString receiptFileName = "Unknown";
 
@@ -22,7 +22,7 @@ public:
     Transaction& operator=(const Transaction& other);
 
     unsigned getCashierId() const;
-    int getTotalAmount() const;
+    double getTotalAmount() const;
     const MyString& getDate() const;
     const MyString& getReceiptFileName() const;
     unsigned getId() const;

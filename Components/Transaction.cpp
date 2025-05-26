@@ -55,7 +55,7 @@ unsigned Transaction::getCashierId() const {
     return cashierId;
 }
 
-int Transaction::getTotalAmount() const {
+double Transaction::getTotalAmount() const {
     return totalAmount;
 }
 

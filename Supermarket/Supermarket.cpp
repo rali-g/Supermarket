@@ -286,6 +286,11 @@ void Supermarket::promoteCashier(unsigned cashierId, const MyString& specialCode
 	employees[index].reset(newManager);
 }
 
+void Supermarket::sell()
+{
+	SellProduct::sell(*this);
+}
+
 void Supermarket::listUserData() const
 {
 	if (!loggedData.logged)
@@ -798,8 +803,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 {
 	std::ifstream ifs(fileName.c_str());
 	if (!ifs.is_open()) {
-		std::cerr << "Cannot open file: " << fileName << "\n";
-		return;
+		throw std::runtime_error("Cannot open file");
 	}
 
 	const size_t MAX_LINE_LEN = 512;
@@ -829,7 +833,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 		else if (std::strcmp(token, "MultipleCategoryCard") == 0) {
 			char* countStr = std::strtok(nullptr, ":");
 			if (!countStr) {
-				std::cerr << "Invalid MultipleCategoryCard count\n";
+				throw std::invalid_argument("Missing count for MultipleCategoryCard");
 				continue;
 			}
 
@@ -839,7 +843,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 			for (unsigned i = 0; i < count; i++) {
 				char* catStr = std::strtok(nullptr, ":");
 				if (!catStr) {
-					std::cerr << "Invalid MultipleCategoryCard categories\n";
+					throw std::invalid_argument("Not enough categories provided for MultipleCategoryCard");
 					break;
 				}
 				unsigned cat = static_cast<unsigned>(std::strtoul(catStr, nullptr, 10));
@@ -848,7 +852,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 
 			char* percentStr = std::strtok(nullptr, ":");
 			if (!percentStr) {
-				std::cerr << "Invalid MultipleCategoryCard percent\n";
+				throw std::invalid_argument("Missing percentage for MultipleCategoryCard");
 				continue;
 			}
 
@@ -859,7 +863,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 		else if (std::strcmp(token, "AllProductsCard") == 0) {
 			char* percentStr = std::strtok(nullptr, ":");
 			if (!percentStr) {
-				std::cerr << "Invalid AllProductsCard format\n";
+				throw std::invalid_argument("Missing percentage for AllProductsCard");
 				continue;
 			}
 
@@ -868,7 +872,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 
 		}
 		else {
-			std::cerr << "Unknown gift card type: " << token << "\n";
+			throw std::invalid_argument("Unknown gift card type");
 		}
 	}
 }

@@ -214,6 +214,15 @@ const MyVector<polymorphic_ptr<GiftCard>>& Supermarket::getDiscounts() const {
 	return discounts;
 }
 
+const UserType& Supermarket::parseUserType(const MyString& input)
+{
+	if (input == "Manager") return UserType::Manager;
+	if (input == "Cashier") return UserType::Cashier;
+	if (input == "Unknown") return UserType::Unknown;
+
+	throw std::invalid_argument("Invalid user type");
+}
+
 void Supermarket::listWarnedCahiers(unsigned points) const
 {
 	for (int i = 0; i < employees.size(); i++)
@@ -346,9 +355,10 @@ void Supermarket::listGiftCards() const {
 	}
 }
 
-void Supermarket::listProductsByCategory(const Category& category) const
+void Supermarket::listProductsByCategory(unsigned id) const
 {
-	const MyString& categoryName = category.getCategoryName();
+	int ind = findCategoryById(id);
+	const MyString& categoryName = categories[ind].getCategoryName();
 	bool found = false;
 	std::cout << "Products in category \"" << categoryName << "\":\n";
 
@@ -694,21 +704,22 @@ void Supermarket::addAllProductsGiftCard(double percent)
 	discounts.push_back(new AllProductsGiftCard(percent));
 }
 
-void Supermarket::addProduct(const ProductType& type)
+void Supermarket::addProduct(const MyString& typeStr)
 {
 	if (loggedData.type != UserType::Manager) {
 		throw std::invalid_argument("\nPermission denied!");
 	}
-	switch (type) {
-	case ProductType::ProductsByUnit: {
+
+	if (typeStr == "ProductsByUnit") {
 		ProductsByUnit p;
 		products.push_back(p.clone());
-		break;
 	}
-	case ProductType::ProductsByWeight:
+	else if (typeStr == "ProductsByWeight") {
 		ProductsByWeight p;
 		products.push_back(p.clone());
-		break;
+	}
+	else {
+		throw std::invalid_argument("Unknown product type");
 	}
 }
 

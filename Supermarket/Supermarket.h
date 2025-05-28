@@ -42,7 +42,6 @@ private:
 	int findCategoryById(unsigned id) const;
 	int findDiscountBySpecialCode(const MyString& code) const;
 	
-
 	bool employeeExists(const Employee& e) const;
 	bool productExists(const Product& product) const;
 	bool discountExists(const GiftCard& card) const;
@@ -93,12 +92,20 @@ public:
 	void login(unsigned id, const MyString& password);
 	void logout();
 	void leave(unsigned id);
+	void listUserData() const;
+	void listEmployees() const;
+	void listCategories() const;
+	void listProducts() const;
+	void listTransactions() const;
+	void listGiftCards() const;
+	void listProductsByCategory(unsigned id) const;
 
 	const MyVector<polymorphic_ptr<Employee>>& getEmployees() const;
 	const MyVector<Transaction>& getTransactions() const;
 	const MyVector<Category>& getCategories() const;
 	const MyVector<polymorphic_ptr<Product>>& getProducts() const;
 	const MyVector<polymorphic_ptr<GiftCard>>& getDiscounts() const;
+	const UserType& parseUserType(const MyString& input);
 
 	//manager commands
 	void listWarnedCahiers(unsigned points) const;
@@ -111,7 +118,7 @@ public:
 	void addCategory(const MyString& name, const MyString& description);
 	void editCategory(unsigned categoryId);
 	void deleteCategory(unsigned categoryId);
-	void addProduct(const ProductType& type);
+	void addProduct(const MyString& typeStr);
 	void editProduct(unsigned productId);
 	void deleteProduct(unsigned productId);
 	void loadProducts(const MyString& fileName);
@@ -119,12 +126,4 @@ public:
 
 	//cashier commands
 	void sell();
-
-	void listUserData() const;
-	void listEmployees() const;
-	void listCategories() const;
-	void listProducts() const;
-	void listTransactions() const;
-	void listGiftCards() const;
-	void listProductsByCategory(const Category& category) const;
 };

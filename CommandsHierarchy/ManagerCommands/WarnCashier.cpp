@@ -9,8 +9,11 @@ void WarnCashier::execute(Supermarket* market) const
 {
 	int cashierId = 0;
 	int points = 0;
-	MyString description;
-	std::cin >> cashierId >> points >> description;
+	char buffer[256];
+	std::cin >> cashierId >> points;
+	std::cin.ignore();
+	std::cin.getline(buffer, 256);
+	MyString description(buffer);
 	try
 	{
 		market->warnCashier(cashierId, points, description);

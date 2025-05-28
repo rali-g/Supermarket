@@ -8,6 +8,7 @@ Command* ListWarnedCashiers::clone() const
 void ListWarnedCashiers::execute(Supermarket* market) const
 {
 	unsigned points = 0;
+	std::cin >> points;
 	try
 	{
 		market->listWarnedCahiers(points);

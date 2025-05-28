@@ -17,7 +17,6 @@ Product::Product(const Product& other)
     : productName(other.productName), price(other.price) {
     category = new Category(*other.category);
     id = other.id;
-    counter = id;
 }
 
 Product& Product::operator=(const Product& other) {
@@ -27,7 +26,6 @@ Product& Product::operator=(const Product& other) {
         price = other.price;
         category = new Category(*other.category);
         id = other.id;
-        counter = id;
     }
     return *this;
 }
@@ -91,5 +89,5 @@ void Product::writeToFile(std::ofstream& ofs) const {
 }
 
 void Product::edit(const MyVector<Category> categories) {
-    std::cout << "\n1. Edit product name\n2. Edit category\n3. Choose from existing category\n4. Edit price\n";
+    std::cout << "\n1. Edit product name\n2. Edit category\n3. Choose from existing category\n5. Edit price\n";
 }

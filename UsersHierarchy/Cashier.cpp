@@ -102,7 +102,7 @@ void Cashier::readFromFile(std::ifstream& ifs)
 
 void Cashier::help() const
 {
-	std::cout << "sell" << std::endl;
+	std::cout << "1. sell" << std::endl;
 }
 
 void Cashier::whoAmI() const

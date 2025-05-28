@@ -8,6 +8,7 @@ void SupermarketLauncher::run()
 	Supermarket& market = Supermarket::getInstance();
 	MyString cmd = "";
 
+	std::cout << "WELCOME TO RALI MARKET!\n\nPlease enter your commands here: \n\n";
 	while (true)
 	{
 		std::cout << ">> ";

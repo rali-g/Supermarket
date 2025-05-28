@@ -72,21 +72,21 @@ void Manager::readFromFile(std::ifstream& ifs)
 
 void Manager::help() const
 {
-	std::cout << "list_warned_cashiers [points]" << std::endl;
-	std::cout << "list_pending" << std::endl;
-	std::cout << "warn_cashier [id] [points] [description]" << std::endl;
-	std::cout << "promote_cashier [id] [special code]" << std::endl;
-	std::cout << "approve_registration [id] [special code]" << std::endl;
-	std::cout << "disapprove_registration [id] [special code]" << std::endl;
-	std::cout << "fire_cashier [id] [special code]" << std::endl;
-	std::cout << "add_category [name] [description]" << std::endl;
-	std::cout << "edit_category [id]" << std::endl;
-	std::cout << "delete_category [id]" << std::endl;
-	std::cout << "add_product [product type]" << std::endl;
-	std::cout << "edit_product [id]" << std::endl;
-	std::cout << "delete_product [id]" << std::endl;
-	std::cout << "load_products [filename]" << std::endl;
-	std::cout << "load_giftcards [filename]" << std::endl;
+	std::cout << "1. list_warned_cashiers [points]" << std::endl;
+	std::cout << "2. list_pending" << std::endl;
+	std::cout << "3. warn_cashier [id] [points] [description]" << std::endl;
+	std::cout << "4. promote_cashier [id] [special code]" << std::endl;
+	std::cout << "5. approve_registration [id] [special code]" << std::endl;
+	std::cout << "6. disapprove_registration [id] [special code]" << std::endl;
+	std::cout << "7. fire_cashier [id] [special code]" << std::endl;
+	std::cout << "8. add_category [name] [description]" << std::endl;
+	std::cout << "9. edit_category [id]" << std::endl;
+	std::cout << "10. delete_category [id]" << std::endl;
+	std::cout << "11. add_product [product type]" << std::endl;
+	std::cout << "12. edit_product [id]" << std::endl;
+	std::cout << "13. delete_product [id]" << std::endl;
+	std::cout << "14. load_products [filename]" << std::endl;
+	std::cout << "15. load_giftcards [filename]" << std::endl;
 }
 
 void Manager::whoAmI() const

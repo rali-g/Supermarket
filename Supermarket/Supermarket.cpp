@@ -114,17 +114,17 @@ void Supermarket::help()
 {
 	if (!loggedData.logged)
 	{
-		std::cout << "register [user type] [firstname] [lastname] [phonenumber] [age] [passwd]" << std::endl;
-		std::cout << "login [id] [passwd]" << std::endl;
-		std::cout << "logout" << std::endl;
-		std::cout << "leave [id]" << std::endl;
-		std::cout << "list_user_data" << std::endl;
-		std::cout << "list_employees" << std::endl;
-		std::cout << "list_categories" << std::endl;
-		std::cout << "list_products" << std::endl;
-		std::cout << "list_transactions" << std::endl;
-		std::cout << "list_giftcards" << std::endl;
-		std::cout << "list_products_by_category" << std::endl;
+		std::cout << "1. register [user type] [first name] [last name] [phone number] [age] [passwd]" << std::endl;
+		std::cout << "2. login [id] [passwd]" << std::endl;
+		std::cout << "3. logout" << std::endl;
+		std::cout << "4. leave [id]" << std::endl;
+		std::cout << "5. list_user_data" << std::endl;
+		std::cout << "6. list_employees" << std::endl;
+		std::cout << "7. list_categories" << std::endl;
+		std::cout << "8. list_products" << std::endl;
+		std::cout << "9. list_transactions" << std::endl;
+		std::cout << "10. list_giftcards" << std::endl;
+		std::cout << "11. list_products_by_category" << std::endl;
 	}
 	else
 	{
@@ -145,6 +145,7 @@ void Supermarket::_register(const MyString& type, const MyString& firstName, con
 	else {
 		throw std::invalid_argument("Invalid user type in _register()");
 	}
+	std::cout << "You registered successfully!\n";
 }
 
 void Supermarket::approveRegistration(unsigned id, const MyString& specialCode)
@@ -861,7 +862,7 @@ void Supermarket::loadGiftCards(const MyString& fileName)
 				continue;
 			}
 
-			unsigned count = static_cast<unsigned>(std::strtoul(countStr, nullptr, 10));
+			unsigned count = static_cast<unsigned>(std::strtoul(countStr, nullptr, 10)) + 1;
 			MyVector<unsigned> categories;
 
 			for (unsigned i = 0; i < count; i++) {

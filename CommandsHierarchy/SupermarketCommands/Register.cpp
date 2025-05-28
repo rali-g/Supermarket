@@ -13,11 +13,10 @@ void Register::execute(Supermarket* market) const
 	MyString pnumber;
 	MyString passwd;
 	MyString type;
-	std::cin >> fname >> sname >> pnumber >> age >> passwd >> type;
-	UserType uType= market->parseUserType(type);
+	std::cin >> type >> fname >> sname >> pnumber >> age >> passwd;
 	try
 	{
-		market->_register(uType, fname, sname, pnumber, age, passwd);
+		market->_register(type, fname, sname, pnumber, age, passwd);
 	}
 	catch (std::invalid_argument& e)
 	{

@@ -9,7 +9,17 @@ void AddCategory::execute(Supermarket* market) const
 {
 	MyString name;
 	MyString description;
-	std::cin >> name >> description;
+
+	char buffer[1024];
+
+	std::cin >> buffer;
+	name = MyString(buffer);
+
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	std::cin.getline(buffer, 1024);
+	description = MyString(buffer);
+
 	try
 	{
 		market->addCategory(name, description);

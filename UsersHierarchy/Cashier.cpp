@@ -100,6 +100,11 @@ void Cashier::readFromFile(std::ifstream& ifs)
 	}
 }
 
+void Cashier::help() const
+{
+	std::cout << "sell" << std::endl;
+}
+
 void Cashier::whoAmI() const
 {
 	std::cout << "Status: Cashier" << std::endl;

@@ -110,18 +110,40 @@ static bool isLogInDataValid(unsigned id, const MyString& password, const Employ
 	return (employee->getId() == id && employee->isValidPassword(password));
 }
 
-void Supermarket::_register(const UserType& type, const MyString& firstName, const MyString& lastName, const MyString& phoneNumber, unsigned age, const MyString& password)
+void Supermarket::help()
 {
-	switch (type) {
-	case UserType::Cashier: {
+	if (!loggedData.logged)
+	{
+		std::cout << "register [user type] [firstname] [lastname] [phonenumber] [age] [passwd]" << std::endl;
+		std::cout << "login [id] [passwd]" << std::endl;
+		std::cout << "logout" << std::endl;
+		std::cout << "leave [id]" << std::endl;
+		std::cout << "list_user_data" << std::endl;
+		std::cout << "list_employees" << std::endl;
+		std::cout << "list_categories" << std::endl;
+		std::cout << "list_products" << std::endl;
+		std::cout << "list_transactions" << std::endl;
+		std::cout << "list_giftcards" << std::endl;
+		std::cout << "list_products_by_category" << std::endl;
+	}
+	else
+	{
+		loggedData.logged->help();
+	}
+}
+
+void Supermarket::_register(const MyString& type, const MyString& firstName, const MyString& lastName, const MyString& phoneNumber, unsigned age, const MyString& password)
+{
+	if(type == "Cashier") {
 		Cashier request(firstName, lastName, phoneNumber, password, age);
 		pendingRequests.push_back(request);
-		break;
 	}
-	case UserType::Manager:
+	else if(type == "Manager") {
 		Manager manager(firstName, lastName, phoneNumber, password, age);
 		employees.push_back(manager.clone());
-		break;
+	}
+	else {
+		throw std::invalid_argument("Invalid user type in _register()");
 	}
 }
 
@@ -212,15 +234,6 @@ const MyVector<polymorphic_ptr<Product>>& Supermarket::getProducts() const {
 
 const MyVector<polymorphic_ptr<GiftCard>>& Supermarket::getDiscounts() const {
 	return discounts;
-}
-
-const UserType& Supermarket::parseUserType(const MyString& input)
-{
-	if (input == "Manager") return UserType::Manager;
-	if (input == "Cashier") return UserType::Cashier;
-	if (input == "Unknown") return UserType::Unknown;
-
-	throw std::invalid_argument("Invalid user type");
 }
 
 void Supermarket::listWarnedCahiers(unsigned points) const
@@ -784,7 +797,7 @@ void Supermarket::loadProducts(const MyString& fileName)
 				products.push_back(polymorphic_ptr<Product>(product));
 			}
 			else if (std::strcmp(productTypeStr, "ProductsByWeight") == 0) {
-				double availableKg = strtod(quantityStr, nullptr);
+				unsigned availableKg = strtod(quantityStr, nullptr);
 				auto* product = new ProductsByWeight(name, *category, price, availableKg);
 				products.push_back(polymorphic_ptr<Product>(product));
 			}
@@ -797,7 +810,7 @@ void Supermarket::loadProducts(const MyString& fileName)
 			if (!productTypeStr || !productIdStr || !quantityStr) continue;
 
 			unsigned productId = static_cast<unsigned>(std::strtoul(productIdStr, nullptr, 10));
-			double quantity = std::strtod(quantityStr, nullptr);
+			unsigned quantity = std::strtod(quantityStr, nullptr);
 
 			int idx = findProductById(productId);
 			if (idx == -1) {

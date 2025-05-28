@@ -9,7 +9,7 @@ void ApproveRegistration::execute(Supermarket* market) const
 {
 	int id = 0;
 	MyString specialCode;
-	std::cin >> cashierId >> specialCode;
+	std::cin >> id >> specialCode;
 	try
 	{
 		market->approveRegistration(id, specialCode);

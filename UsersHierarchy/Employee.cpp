@@ -62,7 +62,6 @@ Employee::Employee(const Employee& other)
 	age = other.age;
 
 	id = other.id;
-	counter = id;
 }
 
 
@@ -76,7 +75,6 @@ Employee& Employee::operator=(const Employee& other)
 		age = other.age;
 
 		id = other.id;
-		counter = id;
 	}
 	return *this;
 }

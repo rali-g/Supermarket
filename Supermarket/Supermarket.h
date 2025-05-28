@@ -87,7 +87,15 @@ public:
 	void addMultipleCategoryGiftCard(double percentage, const MyVector<unsigned>& categoryIds);
 	void addAllProductsGiftCard(double percent);
 
-	void _register(const UserType& type, const MyString& firstName, const MyString& lastName, 
+	const MyVector<polymorphic_ptr<Employee>>& getEmployees() const;
+	const MyVector<Transaction>& getTransactions() const;
+	const MyVector<Category>& getCategories() const;
+	const MyVector<polymorphic_ptr<Product>>& getProducts() const;
+	const MyVector<polymorphic_ptr<GiftCard>>& getDiscounts() const;
+
+	// common user interface
+	void help();
+	void _register(const MyString& type, const MyString& firstName, const MyString& lastName, 
 		const MyString& phoneNumber, unsigned age, const MyString& password);
 	void login(unsigned id, const MyString& password);
 	void logout();
@@ -99,13 +107,6 @@ public:
 	void listTransactions() const;
 	void listGiftCards() const;
 	void listProductsByCategory(unsigned id) const;
-
-	const MyVector<polymorphic_ptr<Employee>>& getEmployees() const;
-	const MyVector<Transaction>& getTransactions() const;
-	const MyVector<Category>& getCategories() const;
-	const MyVector<polymorphic_ptr<Product>>& getProducts() const;
-	const MyVector<polymorphic_ptr<GiftCard>>& getDiscounts() const;
-	const UserType& parseUserType(const MyString& input);
 
 	//manager commands
 	void listWarnedCahiers(unsigned points) const;

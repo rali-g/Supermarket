@@ -1,4 +1,4 @@
-#include "DeleteProduct.h"
+#include "AddProduct.h"
 
 Command* AddProduct::clone() const
 {

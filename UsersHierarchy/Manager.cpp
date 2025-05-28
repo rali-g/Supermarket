@@ -70,6 +70,25 @@ void Manager::readFromFile(std::ifstream& ifs)
 	specialCode = readStringFromFile(ifs);
 }
 
+void Manager::help() const
+{
+	std::cout << "list_warned_cashiers [points]" << std::endl;
+	std::cout << "list_pending" << std::endl;
+	std::cout << "warn_cashier [id] [points] [description]" << std::endl;
+	std::cout << "promote_cashier [id] [special code]" << std::endl;
+	std::cout << "approve_registration [id] [special code]" << std::endl;
+	std::cout << "disapprove_registration [id] [special code]" << std::endl;
+	std::cout << "fire_cashier [id] [special code]" << std::endl;
+	std::cout << "add_category [name] [description]" << std::endl;
+	std::cout << "edit_category [id]" << std::endl;
+	std::cout << "delete_category [id]" << std::endl;
+	std::cout << "add_product [product type]" << std::endl;
+	std::cout << "edit_product [id]" << std::endl;
+	std::cout << "delete_product [id]" << std::endl;
+	std::cout << "load_products [filename]" << std::endl;
+	std::cout << "load_giftcards [filename]" << std::endl;
+}
+
 void Manager::whoAmI() const
 {
 	std::cout << "Status: Manager" << std::endl;

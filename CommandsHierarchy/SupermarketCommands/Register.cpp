@@ -14,6 +14,12 @@ void Register::execute(Supermarket* market) const
 	MyString passwd;
 	MyString type;
 	std::cin >> type >> fname >> sname >> pnumber >> age >> passwd;
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid input for age. Registration aborted.\n";
+		return;
+	}
 	try
 	{
 		market->_register(type, fname, sname, pnumber, age, passwd);

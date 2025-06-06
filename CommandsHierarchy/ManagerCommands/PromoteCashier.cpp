@@ -10,6 +10,12 @@ void PromoteCashier::execute(Supermarket* market) const
 	int cashierId = 0;
 	MyString specialCode;
 	std::cin >> cashierId >> specialCode;
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid input for cashier id.\n";
+		return;
+	}
 	try
 	{
 		market->promoteCashier(cashierId, specialCode);

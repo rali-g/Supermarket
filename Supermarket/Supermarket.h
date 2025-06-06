@@ -12,6 +12,7 @@
 #include "../ProductsHierarchy/ProductsByUnit.h"
 #include "../ProductsHierarchy/ProductsByWeight.h"
 #include "../Supermarket/SellProduct.h"
+#include "../Helpers/Helpers.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -62,7 +63,7 @@ private:
 
 	void writeToFile() const;
 	void readFromFile();
-
+	void logAction(const MyString& message) const;
 
 	Supermarket();
 	~Supermarket() = default;

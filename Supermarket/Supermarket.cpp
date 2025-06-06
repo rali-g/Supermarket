@@ -137,15 +137,18 @@ void Supermarket::_register(const MyString& type, const MyString& firstName, con
 	if(type == "Cashier") {
 		Cashier request(firstName, lastName, phoneNumber, password, age);
 		pendingRequests.push_back(request);
+		logAction(MyString(" User ") + firstName + " " + lastName + MyString(" is waiting for registration to be accepted"));
 	}
 	else if(type == "Manager") {
 		Manager manager(firstName, lastName, phoneNumber, password, age);
 		employees.push_back(manager.clone());
+		char buffer[1024];
+		logAction(MyString(" User ") + firstName + " " + lastName + MyString(" registered"));
+		std::cout << "You registered successfully!\n";
 	}
 	else {
-		throw std::invalid_argument("Invalid user type in _register()");
+		throw std::invalid_argument("Invalid user type!");
 	}
-	std::cout << "You registered successfully!\n";
 }
 
 void Supermarket::approveRegistration(unsigned id, const MyString& specialCode)
@@ -155,6 +158,9 @@ void Supermarket::approveRegistration(unsigned id, const MyString& specialCode)
 			if (pendingRequests[i].getId() == id) {
 				employees.push_back(pendingRequests[i].clone());
 				pendingRequests.erase(i);
+				char buffer[1024];
+				logAction(MyString(" User ") + uintToStr(id, buffer) + MyString(" registration is approved"));
+				std::cout << "Cashier " << id << " registration approved!\n";
 				return;
 			}
 		}
@@ -168,6 +174,9 @@ void Supermarket::disapproveRegistration(unsigned id, const MyString& specialCod
 		for (int i = 0; i < pendingRequests.size(); i++) {
 			if (pendingRequests[i].getId() == id) {
 				pendingRequests.erase(i);
+				char buffer[1024];
+				logAction(MyString(" User ") + uintToStr(id, buffer) + MyString(" registration is diapproved"));
+				std::cout << "Cashier " << id << " registration disapproved!\n";
 				return;
 			}
 		}
@@ -195,6 +204,8 @@ void Supermarket::login(unsigned id, const MyString& password)
 			{
 				loggedData.type = UserType::Cashier;
 			}
+			char buffer[1024];
+			logAction(MyString(" User ") + uintToStr(id, buffer) + MyString(" logged in"));
 			std::cout << "You successfully logged in!\n";
 			return;
 		}
@@ -204,6 +215,13 @@ void Supermarket::login(unsigned id, const MyString& password)
 
 void Supermarket::logout()
 {
+	if (!loggedData.logged) {
+		std::cout << "No user is currently logged in.\n";
+		return;
+	}
+
+	char buffer[1024];
+	logAction(MyString(" User ") + uintToStr(loggedData.logged->getId(), buffer) + MyString(" logged out"));
 	loggedData = LoggedData();
 	std::cout << "You successfully logged out!\n";
 }
@@ -213,6 +231,8 @@ void Supermarket::leave(unsigned id) {
 	if (index == -1) {
 		throw std::invalid_argument("Invalid employee ID");
 	}
+	char buffer[1024];
+	logAction(MyString(" User ") + uintToStr(id, buffer) + MyString(" left the market"));
 	employees.erase(index);
 }
 
@@ -285,6 +305,8 @@ void Supermarket::warnCashier(unsigned cashierId, unsigned points, const MyStrin
 		}
 		Warning warning(loggedData.loggedManager->getFirstName(), description, severity);
 		cashier->addElementToWarnings(warning);
+		char buffer[1024];
+		logAction(MyString(" User ") + uintToStr(cashierId, buffer) + MyString(" has been warned"));
 		return;
 	}
 
@@ -307,6 +329,8 @@ void Supermarket::promoteCashier(unsigned cashierId, const MyString& specialCode
 	Manager* newManager = new Manager(cashier->getFirstName(), cashier->getSecondName(), 
 		cashier->getPhoneNumber(), cashier->getPassword(), cashier->getAge());
 	employees[index].reset(newManager);
+	char buffer[1024];
+	logAction(MyString(" User ") + uintToStr(cashierId, buffer) + MyString(" has been promoted"));
 }
 
 void Supermarket::sell()
@@ -607,6 +631,22 @@ void Supermarket::readFromFile()
 	loadTransactions();
 }
 
+void Supermarket::logAction(const MyString& message) const
+{
+	std::ofstream ofs("log.txt", std::ios::app);
+	if (!ofs.is_open()) {
+		throw std::runtime_error("Cannot open log file");
+	}
+
+	std::time_t now = std::time(nullptr);
+	std::tm* localTime = std::localtime(&now);
+
+	char timeBuffer[100];
+	std::strftime(timeBuffer, sizeof(timeBuffer), "[%Y-%m-%d %H:%M:%S]", localTime);
+
+	ofs << timeBuffer << " " << message.c_str() << '\n';
+}
+
 Supermarket::Supermarket()
 {
 	readFromFile();
@@ -648,6 +688,8 @@ void Supermarket::fireCashier(unsigned cashierId, const MyString& specialCode)
 			throw std::invalid_argument("Invalid cashier ID");
 		}
 		employees.erase(ind);
+		char buffer[1024];
+		logAction(MyString(" User ") + uintToStr(cashierId, buffer) + MyString(" has been fired"));
 		return;
 	}
 	throw std::invalid_argument("\nPermission denied!");

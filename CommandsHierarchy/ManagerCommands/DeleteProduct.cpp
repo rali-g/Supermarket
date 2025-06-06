@@ -9,6 +9,12 @@ void DeleteProduct::execute(Supermarket* market) const
 {
 	unsigned int id;
 	std::cin >> id;
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid input for id.\n";
+		return;
+	}
 	try
 	{
 		market->deleteProduct(id);

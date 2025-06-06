@@ -11,6 +11,12 @@ void WarnCashier::execute(Supermarket* market) const
 	int points = 0;
 	char buffer[256];
 	std::cin >> cashierId >> points;
+	if (std::cin.fail()) {
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Invalid input.\n";
+		return;
+	}
 	std::cin.ignore();
 	std::cin.getline(buffer, 256);
 	MyString description(buffer);

@@ -54,3 +54,17 @@ unsigned strToUint(const MyString& str)
 	return result;
 }
 
+const MyString& getFormattedDate()
+{
+	std::time_t currentTime;
+	std::tm localTime;
+
+	time(&currentTime);
+	localtime_s(&localTime, &currentTime);
+
+	char timeStr[1024];
+	std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", &localTime);
+
+	return MyString(timeStr);
+}
+

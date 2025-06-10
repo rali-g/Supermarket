@@ -24,6 +24,11 @@ public:
 	GiftCard* clone() const override {
 		return new AllProductsGiftCard(*this);
 	}
+
+	GiftCardType getGiftCardType() const override {
+		return GiftCardType::AllProductsGiftCard;
+	}
+
 	void print() const override {
 		std::cout << "AllCategoryGiftCard\n";
 		GiftCard::print();

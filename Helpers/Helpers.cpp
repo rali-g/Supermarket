@@ -68,3 +68,20 @@ const MyString& getFormattedDate()
 	return MyString(timeStr);
 }
 
+MyString simpleSha256(const MyString& input) {
+	std::array<uint8_t, 32> hash{};
+	for (size_t i = 0; i < input.getSize(); ++i) {
+		hash[i % 32] ^= input[i];
+	}
+
+	std::ostringstream oss;
+	for (const auto& byte : hash) {
+		oss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(byte);
+	}
+
+	return MyString(oss.str().c_str());
+}
+
+MyString hashPassword(const MyString& password) {
+	return simpleSha256(password);
+}

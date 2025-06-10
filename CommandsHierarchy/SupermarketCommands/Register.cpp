@@ -1,4 +1,5 @@
 #include "Register.h"
+#include "../../Helpers/Helpers.h"
 
 Command* Register::clone() const
 {
@@ -20,9 +21,10 @@ void Register::execute(Supermarket* market) const
 		std::cout << "Invalid input for age. Registration aborted.\n";
 		return;
 	}
+	MyString hash = hashPassword(passwd);
 	try
 	{
-		market->_register(type, fname, sname, pnumber, age, passwd);
+		market->_register(type, fname, sname, pnumber, age, hash);
 	}
 	catch (std::invalid_argument& e)
 	{

@@ -100,6 +100,11 @@ void Cashier::readFromFile(std::ifstream& ifs)
 	}
 }
 
+UserType Cashier::getUserType() const
+{
+	return UserType::Cashier;
+}
+
 void Cashier::help() const
 {
 	std::cout << "1. sell" << std::endl;

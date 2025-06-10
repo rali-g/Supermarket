@@ -22,6 +22,11 @@ void ProductsByWeight::setQuantity(unsigned quantity) {
     availableKilograms = quantity;
 }
 
+ProductType ProductsByWeight::getProductType() const
+{
+	return ProductType::ProductsByWeight;
+}
+
 void ProductsByWeight::edit(const MyVector<Category> categories)
 {
 	Product::edit(categories);

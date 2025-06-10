@@ -106,8 +106,8 @@ static bool isLogInDataValid(unsigned id, const MyString& password, const Employ
 	{
 		return false;
 	}
-
-	return (employee->getId() == id && employee->isValidPassword(password));
+	MyString hash = hashPassword(password);
+	return (employee->getId() == id && employee->isValidPassword(hash));
 }
 
 void Supermarket::help()
@@ -368,8 +368,8 @@ void Supermarket::listCategories() const
 void Supermarket::listProducts() const {
 	std::cout << "\nProducts:\n";
 	for (int i = 0; i < products.size(); ++i) {
-		std::cout << products[i].get()->getId() << ". ";
 		if (products[i]) {
+			std::cout << products[i].get()->getId() << ". ";
 			products[i]->printFormatted();
 		}
 	}
@@ -414,7 +414,7 @@ void Supermarket::listProductsByCategory(unsigned id) const
 
 void Supermarket::saveEmployees() const
 {
-	std::ofstream ofs("employees.dat", std::ios::binary);
+	std::ofstream ofs("employees.dat", std::ios::binary | std::ios::trunc);
 
 	if (!ofs.is_open())
 	{
@@ -425,6 +425,8 @@ void Supermarket::saveEmployees() const
 
 	for (size_t i = 0; i < size; i++)
 	{
+		UserType type = employees[i]->getUserType();
+		ofs.write((const char*)&type, sizeof(type));
 		employees[i]->writeToFile(ofs);
 	}
 
@@ -444,6 +446,8 @@ void Supermarket::saveProducts() const
 
 	for (size_t i = 0; i < size; i++)
 	{
+		ProductType type = products[i]->getProductType();
+		ofs.write((const char*)&type, sizeof(type));
 		products[i]->writeToFile(ofs);
 	}
 
@@ -463,6 +467,8 @@ void Supermarket::saveDiscounts() const
 
 	for (size_t i = 0; i < size; i++)
 	{
+		GiftCardType type = discounts[i]->getGiftCardType();
+		ofs.write((const char*)&type, sizeof(type));
 		discounts[i]->writeToFile(ofs);
 	}
 
@@ -521,7 +527,8 @@ void Supermarket::loadEmployees()
 
 	for (size_t i = 0; i < size; i++)
 	{
-		employees.push_back(UserFactory::createUser(ifs));
+		Employee* temp = UserFactory::createUser(ifs);
+		employees.push_back(temp);
 	}
 
 	ifs.close();
@@ -541,7 +548,8 @@ void Supermarket::loadProducts()
 
 	for (size_t i = 0; i < size; i++)
 	{
-		products.push_back(ProductFactory::createProduct(ifs));
+		Product* temp = ProductFactory::createProduct(ifs);
+		products.push_back(temp);
 	}
 
 	ifs.close();
@@ -561,7 +569,8 @@ void Supermarket::loadDiscounts()
 
 	for (size_t i = 0; i < size; i++)
 	{
-		discounts.push_back(GiftCardFactory::createGiftCard(ifs));
+		GiftCard* temp = GiftCardFactory::createGiftCard(ifs);
+		discounts.push_back(temp);
 	}
 
 	ifs.close();
@@ -620,6 +629,13 @@ void Supermarket::writeToFile() const
 	saveDiscounts();
 	saveCategories();
 	saveTransactions();
+
+	std::ofstream ofs("pending_requests.dat", std::ios::binary);
+	size_t size = pendingRequests.size();
+	ofs.write((const char*)&size, sizeof(size_t));
+	for (int i = 0; i < pendingRequests.size(); i++) {
+		pendingRequests[i].writeToFile(ofs);
+	}
 }
 
 void Supermarket::readFromFile()
@@ -629,6 +645,15 @@ void Supermarket::readFromFile()
 	loadDiscounts();
 	loadCategories();
 	loadTransactions();
+
+	std::ifstream ifs("pending_requests.dat", std::ios::binary);
+	size_t size = 0;
+	ifs.read((char*)&size, sizeof(size_t));
+	for (int i = 0; i < size; i++) {
+		Cashier temp;
+		temp.readFromFile(ifs);
+		pendingRequests.push_back(temp);
+	}
 }
 
 void Supermarket::logAction(const MyString& message) const
@@ -652,10 +677,10 @@ Supermarket::Supermarket()
 	readFromFile();
 }
 
-//Supermarket::~Supermarket()
-//{
-//	writeToFile();
-//}
+Supermarket::~Supermarket()
+{
+	writeToFile();
+}
 
 Supermarket& Supermarket::getInstance()
 {

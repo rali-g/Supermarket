@@ -44,6 +44,7 @@ public:
 	virtual void readFromFile(std::ifstream& ifs) = 0;
 	virtual void edit(const MyVector<Category> categories) = 0;
 
+	virtual ProductType getProductType() const = 0;
 	virtual void printFormatted() const = 0;
 	virtual void print() const = 0;
 	virtual Product* clone() const = 0;

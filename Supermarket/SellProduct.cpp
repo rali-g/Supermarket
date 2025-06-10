@@ -66,6 +66,9 @@ void SellProduct::sell(Supermarket& supermarket)
 
         std::cout << "-------------";
     }
+    if (total <= 0) {
+        return;
+    }
 
     char ch;
     std::cout << "Add voucher (Y/N)? ";

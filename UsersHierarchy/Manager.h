@@ -23,6 +23,7 @@ public:
 	void writeToFile(std::ofstream& ofs) const;
 	void readFromFile(std::ifstream& ifs);
 
+	UserType getUserType() const override;
 	void help() const override;
 	void whoAmI() const override;
 	Employee* clone() const override;

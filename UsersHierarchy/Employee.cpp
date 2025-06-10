@@ -8,7 +8,7 @@ void Employee::printBasicInfo() const
 	std::cout << "First name: " << firstName << '\n';
 	std::cout << "Second name: " << secondName << '\n';
 	std::cout << "Phone number: " << phoneNumber << '\n';
-	std::cout << "Password: " << password << '\n';
+	std::cout << "Password Hash: " << password << '\n';
 	if (age == 0) {
 		std::cout << "Age: Unknown" << '\n';
 	}

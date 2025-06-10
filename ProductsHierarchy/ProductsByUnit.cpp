@@ -34,6 +34,11 @@ void ProductsByUnit::readFromFile(std::ifstream& ifs)
     ifs.read((char*)&availableQuantity, sizeof(availableQuantity));
 }
 
+ProductType ProductsByUnit::getProductType() const
+{
+	return ProductType::ProductsByUnit;
+}
+
 void ProductsByUnit::edit(const MyVector<Category> categories)
 {
     Product::edit(categories);

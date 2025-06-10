@@ -61,12 +61,10 @@ private:
 	void loadCategories();
 	void loadTransactions();
 
-	void writeToFile() const;
-	void readFromFile();
 	void logAction(const MyString& message) const;
 
 	Supermarket();
-	~Supermarket() = default;
+	~Supermarket();
 public:
 	static Supermarket& getInstance();
 
@@ -128,4 +126,8 @@ public:
 
 	//cashier commands
 	void sell();
+
+
+	void writeToFile() const;
+	void readFromFile();
 };

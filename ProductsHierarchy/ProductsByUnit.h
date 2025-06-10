@@ -19,6 +19,7 @@ public:
     void writeToFile(std::ofstream& ofs) const;
     void readFromFile(std::ifstream& ifs);
 
+    ProductType getProductType() const override;
     void edit(const MyVector<Category> categories) override;
     void printFormatted() const override;
     void print() const override;

@@ -66,6 +66,10 @@ public:
         return new MultipleCategoryGiftCard(*this);
     }
 
+    GiftCardType getGiftCardType() const override {
+        return GiftCardType::MultipleCategoryGiftCard;
+    }
+
     void print() const override {
         std::cout << "MultipleCategoryGiftCard\n";
         GiftCard::print();

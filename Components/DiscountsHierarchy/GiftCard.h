@@ -44,6 +44,7 @@ public:
 	virtual void writeToFile(std::ofstream& ofs) const = 0;
 	virtual void readFromFile(std::ifstream& ifs) = 0;
 
+	virtual GiftCardType getGiftCardType() const = 0;
 	virtual GiftCard* clone() const = 0;
 	virtual void print() const = 0;
 	virtual void whoAmI() const = 0;

@@ -6,6 +6,7 @@
 void SupermarketLauncher::run()
 {
 	Supermarket& market = Supermarket::getInstance();
+	//market.readFromFile();
 	MyString cmd = "";
 
 	std::cout << "WELCOME TO RALI MARKET!\n\nPlease enter your commands here: \n\n";
@@ -16,6 +17,7 @@ void SupermarketLauncher::run()
 
 		if (cmd == "stop")
 		{
+			//market.writeToFile();
 			break;
 		}
 

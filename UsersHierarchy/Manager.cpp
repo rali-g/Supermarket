@@ -70,6 +70,11 @@ void Manager::readFromFile(std::ifstream& ifs)
 	specialCode = readStringFromFile(ifs);
 }
 
+UserType Manager::getUserType() const
+{
+	return UserType::Manager;
+}
+
 void Manager::help() const
 {
 	std::cout << "1. list_warned_cashiers [points]" << std::endl;
